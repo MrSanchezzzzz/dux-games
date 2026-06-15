@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mrsanchezzzzz.github.io/dux-games/sitemap.xml

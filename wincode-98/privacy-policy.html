@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1180" />
+<title>Privacy Policy — WinCode 98</title>
+<meta name="description" content="Privacy policy for WinCode 98 iOS game. No personal data collected. All game progress stored locally on your device." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://mrsanchezzzzz.github.io/ninety-eight/privacy-policy.html" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>" />
+<style>
+  @font-face {
+    font-family: 'IBM VGA';
+    src: url('assets/WebPlus_IBM_VGA_9x16.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+  :root{
+    --gray:        #c3c3c3;
+    --gray-2:      #c0c0c0;
+    --gray-3:      #dfdfdf;
+    --gray-soft:   #d4d0c8;
+    --shadow:      #808080;
+    --shadow-2:    #404040;
+    --black:       #000000;
+    --white:       #ffffff;
+    --teal:        #008080;
+    --navy:        #000080;
+    --navy-2:      #1084d0;
+    --maroon:      #800000;
+    --olive:       #808000;
+    --link:        #0000ee;
+    --hl:          #fefe54;
+    --alert:       #c00000;
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family: 'IBM VGA', 'MS Sans Serif', monospace;
+    font-size: 16px;
+    color: var(--black);
+    background: var(--teal);
+    background-image:
+      radial-gradient(rgba(0,0,0,0.18) 1px, transparent 1px),
+      radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 4px 4px, 4px 4px;
+    background-position: 0 0, 2px 2px;
+    -webkit-font-smoothing: none;
+    image-rendering: pixelated;
+    line-height: 1.35;
+  }
+
+  .win{
+    background: var(--gray);
+    border: 2px solid;
+    border-color: var(--white) var(--shadow-2) var(--shadow-2) var(--white);
+    box-shadow:
+      inset 1px 1px 0 0 var(--gray-3),
+      inset -1px -1px 0 0 var(--shadow),
+      4px 4px 0 0 rgba(0,0,0,0.55);
+    padding: 3px;
+  }
+  .titlebar{
+    height: 28px;
+    padding: 0 4px 0 6px;
+    color: var(--white);
+    background:
+      linear-gradient(90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,.10) 50%,
+        rgba(255,255,255,0) 100%) 0 0 / 200% 100% no-repeat,
+      linear-gradient(90deg, var(--navy) 0%, var(--navy-2) 100%);
+    animation: bar-shimmer 6s linear infinite;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+    font-weight: 700;
+  }
+  @keyframes bar-shimmer{
+    0%  { background-position: -50% 0, 0 0; }
+    100%{ background-position: 150% 0, 0 0; }
+  }
+  .titlebar .title{
+    flex: 1;
+    font-size: 14px;
+    line-height: 28px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .winbtns{ display: flex; gap: 2px; }
+  .winbtn{
+    width: 22px; height: 20px;
+    background: var(--gray);
+    border: 2px solid;
+    border-color: var(--white) var(--shadow-2) var(--shadow-2) var(--white);
+    box-shadow: inset 1px 1px 0 0 var(--gray-3), inset -1px -1px 0 0 var(--shadow);
+    color: var(--black);
+    font-size: 12px;
+    font-weight: 900;
+    display: grid; place-items: center;
+    line-height: 1;
+  }
+  .menubar{
+    display: flex; gap: 10px;
+    padding: 2px 6px 4px;
+    border-bottom: 1px solid var(--shadow);
+    font-size: 14px;
+  }
+  .menubar span u{ text-decoration: underline; }
+  .winbody{ padding: 14px; }
+
+  .topbar{
+    background: var(--gray);
+    border-bottom: 2px solid var(--shadow-2);
+    box-shadow: inset 0 -1px 0 0 var(--white);
+    padding: 4px 8px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px;
+  }
+  .start{
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 8px;
+    background: var(--gray);
+    border: 2px solid;
+    border-color: var(--white) var(--shadow-2) var(--shadow-2) var(--white);
+    font-weight: 700;
+  }
+  .start .flag{
+    display:inline-grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    width: 14px; height: 14px;
+  }
+  .start .flag i{ display:block; }
+  .start .flag i:nth-child(1){ background: var(--alert); }
+  .start .flag i:nth-child(2){ background: #00a000; }
+  .start .flag i:nth-child(3){ background: var(--navy); }
+  .start .flag i:nth-child(4){ background: #e0a000; }
+  .clock{
+    margin-left: auto;
+    padding: 2px 8px;
+    background: var(--gray);
+    border: 1px solid;
+    border-color: var(--shadow) var(--white) var(--white) var(--shadow);
+    font-family: 'IBM VGA', monospace;
+    font-size: 14px;
+  }
+  .clock .colon{ animation: blink 1s steps(2, end) infinite; }
+  @keyframes blink{ 50%{ opacity: 0; } }
+  .tb-app{
+    padding: 3px 10px;
+    background: var(--gray);
+    border: 2px solid;
+    border-color: var(--white) var(--shadow-2) var(--shadow-2) var(--white);
+    font-size: 13px;
+  }
+  .tb-app.active{
+    border-color: var(--shadow-2) var(--white) var(--white) var(--shadow-2);
+    background: var(--gray-soft);
+  }
+
+  .page{
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+  .stack > * + *{ margin-top: 22px; }
+
+  /* Document content */
+  .doc-body{
+    padding: 24px 28px;
+    background: var(--white);
+    border: 2px solid;
+    border-color: var(--shadow-2) var(--white) var(--white) var(--shadow-2);
+    box-shadow: inset 1px 1px 0 0 var(--shadow), inset -1px -1px 0 0 var(--gray-3);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .doc-body h1{
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--navy);
+  }
+  .doc-body .doc-meta{
+    font-size: 13px;
+    color: var(--shadow);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--navy);
+  }
+  .doc-body h2{
+    font-size: 16px;
+    font-weight: 700;
+    margin: 26px 0 8px;
+    padding: 4px 10px;
+    background: var(--navy);
+    color: var(--white);
+    display: inline-block;
+  }
+  .doc-body h2:first-of-type{ margin-top: 0; }
+  .doc-body p{ margin: 0 0 12px; }
+  .doc-body p:last-child{ margin-bottom: 0; }
+  .doc-body ul{
+    margin: 0 0 12px;
+    padding-left: 20px;
+  }
+  .doc-body ul li{ margin-bottom: 5px; }
+  .doc-body ul li::marker{ color: var(--navy); content: "► "; }
+  .doc-body a{ color: var(--link); }
+  .doc-body strong{ font-weight: 700; }
+
+  /* Callout / info box */
+  .callout{
+    background: #e8f0ff;
+    border: 2px solid;
+    border-color: var(--shadow-2) var(--white) var(--white) var(--shadow-2);
+    padding: 10px 14px;
+    margin: 14px 0;
+    font-size: 14px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .callout.green{ background: #e8ffe8; }
+  .callout .c-ico{ font-size: 20px; flex: 0 0 24px; line-height: 1.2; }
+
+  /* Section divider */
+  .doc-body hr{
+    border: none;
+    border-top: 1px solid var(--shadow);
+    margin: 24px 0;
+  }
+
+  /* Table of contents */
+  .toc{
+    background: var(--gray-soft);
+    border: 1px solid var(--shadow);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .toc .toc-title{
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--navy);
+  }
+  .toc ol{
+    margin: 0; padding-left: 20px;
+  }
+  .toc li{ margin-bottom: 3px; }
+  .toc a{ color: var(--link); }
+
+  /* Back button */
+  .btn-back{
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px;
+    background: var(--gray);
+    border: 2px solid;
+    border-color: var(--white) var(--shadow-2) var(--shadow-2) var(--white);
+    box-shadow: inset 1px 1px 0 0 var(--gray-3), inset -1px -1px 0 0 var(--shadow);
+    font-family: 'IBM VGA', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+    text-decoration: none;
+    transition: transform .08s ease-out, filter .15s ease-out;
+  }
+  .btn-back:hover{ filter: brightness(1.04); transform: translate(-1px,-1px); }
+
+  .breadcrumb{
+    font-family: 'IBM VGA', monospace;
+    font-size: 13px;
+    color: var(--shadow-2);
+    margin-bottom: 4px;
+  }
+  .breadcrumb a{ color: var(--navy); text-decoration: underline; }
+
+  .foot{
+    margin-top: 28px;
+    padding: 12px 14px;
+    display: flex; gap: 14px; align-items: center; justify-content: space-between;
+    font-size: 14px; color: var(--shadow-2);
+    font-family: 'IBM VGA', monospace;
+  }
+  .foot a{ color: var(--shadow-2); text-decoration: underline; }
+
+  body::before{
+    content:""; position: fixed; inset: 0;
+    pointer-events: none; z-index: 9999;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.05) 0 1px, transparent 1px 3px);
+    mix-blend-mode: multiply;
+    opacity: .35;
+  }
+
+  @keyframes win-open{
+    0%   { opacity: 0; transform: scale(.88); }
+    60%  { opacity: 1; transform: scale(1.01); }
+    100% { transform: scale(1); }
+  }
+  .win-anim{ transform-origin: center top; animation: win-open .4s cubic-bezier(.2,.8,.2,1) both; }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="start">
+    <span class="flag"><i></i><i></i><i></i><i></i></span>
+    Start
+  </div>
+  <div class="tb-app active">📜&nbsp; PRIVACY_POLICY.TXT</div>
+  <div class="tb-app">📄&nbsp; WINCODE98.EXE</div>
+  <div class="clock">11<span class="colon">:</span>45 PM</div>
+</div>
+
+<main class="page stack">
+
+  <div style="display:flex; align-items:center; justify-content:space-between;">
+    <div class="breadcrumb">
+      <a href="ninety-eight.html">WinCode 98</a>
+      <span>›</span>
+      Privacy Policy
+    </div>
+    <a class="btn-back" href="ninety-eight.html">◄ Back</a>
+  </div>
+
+  <div class="win win-anim">
+    <div class="titlebar">
+      <span style="font-size:16px; flex:0 0 20px;">📜</span>
+      <span class="title">privacy_policy.txt — Notepad</span>
+      <div class="winbtns">
+        <div class="winbtn">_</div>
+        <div class="winbtn">▢</div>
+        <div class="winbtn">✕</div>
+      </div>
+    </div>
+    <div class="menubar">
+      <span><u>F</u>ile</span>
+      <span><u>E</u>dit</span>
+      <span><u>S</u>earch</span>
+      <span><u>H</u>elp</span>
+    </div>
+
+    <div class="winbody">
+      <div class="doc-body">
+
+        <h1>Privacy Policy</h1>
+        <div class="doc-meta">
+          App: <strong>WinCode 98</strong> &nbsp;·&nbsp;
+          Effective date: <strong>May 9, 2026</strong> &nbsp;·&nbsp;
+          Last updated: <strong>May 9, 2026</strong>
+        </div>
+
+        <div class="callout green">
+          <span class="c-ico">✔</span>
+          <div><strong>Short version:</strong> This app does not collect, transmit, or share any personal data. Everything stays on your device. No accounts. No cloud. No tracking.</div>
+        </div>
+
+        <div class="toc">
+          <div class="toc-title">Contents</div>
+          <ol>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#data-collected">Data We Collect</a></li>
+            <li><a href="#local-storage">Local Storage</a></li>
+            <li><a href="#third-parties">Third-Party Services</a></li>
+            <li><a href="#children">Children's Privacy</a></li>
+            <li><a href="#your-rights">Your Rights</a></li>
+            <li><a href="#changes">Changes to This Policy</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ol>
+        </div>
+
+        <!-- 1 -->
+        <h2 id="overview">1. Overview</h2>
+        <p>
+          <strong>WinCode 98</strong> ("the App", "we", "our") is a mobile idle game developed as a solo indie project. This Privacy Policy explains what information the App accesses, how it is used, and how it is stored.
+        </p>
+        <p>
+          We are committed to protecting your privacy. This App is designed to function entirely offline and on-device. We do not operate servers, do not require accounts, and do not transmit your data anywhere.
+        </p>
+
+        <!-- 2 -->
+        <h2 id="data-collected">2. Data We Collect</h2>
+
+        <p><strong>We do not collect any personal data.</strong></p>
+        <p>Specifically, the App does not collect, access, or process:</p>
+        <ul>
+          <li>Your name, email address, or any contact information</li>
+          <li>Your device's advertising identifier (IDFA / GAID)</li>
+          <li>Your location</li>
+          <li>Your contacts, photos, microphone, or camera</li>
+          <li>Your browsing history or behavior on other apps or websites</li>
+          <li>Any biometric, health, or sensitive data</li>
+          <li>Any payment information (the App does not currently include in-app purchases)</li>
+        </ul>
+
+        <p>The only data generated by the App is your <strong>local game save</strong>, which records your in-game progress. See Section 3.</p>
+
+        <!-- 3 -->
+        <h2 id="local-storage">3. Local Storage</h2>
+        <p>
+          The App saves your game progress locally on your device as a JSON file. This file contains only game-related data:
+        </p>
+        <ul>
+          <li>In-game currency and experience points</li>
+          <li>Player level and rank</li>
+          <li>Upgrade and skill levels</li>
+          <li>Task and achievement progress</li>
+          <li>Energy state and timestamps (stored in UTC to calculate offline income)</li>
+          <li>In-game settings (sound, music, vibration toggles)</li>
+          <li>A randomly generated local player ID used solely to identify your save file — this ID is never transmitted anywhere</li>
+        </ul>
+        <p>
+          This data never leaves your device. It is not uploaded to any server, not shared with any third party, and not accessible by us. If you delete the App, all local save data is permanently removed.
+        </p>
+        <div class="callout">
+          <span class="c-ico">ℹ</span>
+          <div>The App stores a local UTC timestamp to calculate how much offline income you earned while the app was closed. This timestamp is stored only on your device and is never transmitted.</div>
+        </div>
+
+        <!-- 4 -->
+        <h2 id="third-parties">4. Third-Party Services</h2>
+        <p>
+          <strong>The current version of the App does not include any third-party SDKs, analytics services, advertising networks, or crash reporting tools.</strong>
+        </p>
+        <p>No data is shared with:</p>
+        <ul>
+          <li>Analytics providers (e.g. Firebase, Unity Analytics)</li>
+          <li>Advertising networks (e.g. AdMob, Unity LevelPlay)</li>
+          <li>Crash reporting services (e.g. Firebase Crashlytics)</li>
+          <li>Cloud save providers</li>
+          <li>Social platforms</li>
+          <li>Any other third party</li>
+        </ul>
+        <p>
+          If future versions of the App introduce third-party integrations (such as optional rewarded ads or crash reporting), this Privacy Policy will be updated before release to clearly describe what data is involved, and you will be notified through an App Store update.
+        </p>
+
+        <h2 id="app-store">5. Apple App Store</h2>
+        <p>
+          The App is distributed through the Apple App Store. Apple may collect certain data independently when you download or purchase apps — such as your Apple ID, device identifiers, and purchase history. This data collection is governed by <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's Privacy Policy</a>, not ours. We have no access to this data.
+        </p>
+
+        <!-- 5 -->
+        <h2 id="children">6. Children's Privacy</h2>
+        <p>
+          The App is rated 4+ on the Apple App Store and is appropriate for all ages.
+        </p>
+        <p>
+          Because we do not collect any personal data from any users, there is no personal data collected from children under the age of 13 (or the applicable age in your jurisdiction). The App is fully compliant with the Children's Online Privacy Protection Act (COPPA) and similar regulations.
+        </p>
+        <p>
+          No advertising is shown in the current version. No in-app purchases exist in the current version. No account creation is required at any age.
+        </p>
+
+        <!-- 6 -->
+        <h2 id="your-rights">7. Your Rights</h2>
+        <p>
+          Since we do not collect or store any personal data on our end, there is no personal data for us to provide, correct, export, or delete on your behalf.
+        </p>
+        <p>
+          Your game save data is stored entirely on your own device and is under your full control:
+        </p>
+        <ul>
+          <li><strong>To delete your data:</strong> Use the "Reset Progress" option in the App's Settings screen, or uninstall the App.</li>
+          <li><strong>To back up your data:</strong> Use your device's standard backup features (iCloud device backup).</li>
+        </ul>
+        <p>
+          If you have questions about data that Apple may hold in connection with App Store purchases or downloads, please contact Apple directly.
+        </p>
+
+        <!-- 7 -->
+        <h2 id="changes">8. Changes to This Policy</h2>
+        <p>
+          We may update this Privacy Policy when new features are added (such as optional ads, in-app purchases, or crash reporting). Changes will be published here and reflected in the App Store update notes before taking effect.
+        </p>
+        <p>
+          Continued use of the App after a policy update constitutes acceptance of the updated policy. If changes are material, we will make reasonable effort to notify you through the App Store update description.
+        </p>
+        <p>
+          The effective date at the top of this document reflects when it was last updated.
+        </p>
+
+        <!-- 8 -->
+        <h2 id="contact">9. Contact</h2>
+        <p>
+          If you have any questions, concerns, or requests regarding this Privacy Policy or the App, please contact us:
+        </p>
+        <p>
+          <strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#7b10091e161e1518130e1008133b1c161a121755181416"><span class="__cf_email__" data-cfemail="3d564f585058535e5548564e557d5a505c5451135e5250">[email&#160;protected]</span></a><br/>
+          <strong>App:</strong> WinCode 98<br/>
+          <strong>Developer:</strong> Independent / Solo Developer
+        </p>
+        <p>
+          We aim to respond to privacy-related inquiries within 7 business days.
+        </p>
+
+        <hr/>
+        <p style="font-size:13px; color:var(--shadow);">
+          This privacy policy was last reviewed and updated on May 9, 2026.<br/>
+          WinCode 98 — © 2026 All rights reserved.
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div>© 2026 WinCode 98 — Idle Programmer Simulator</div>
+    <div style="display:flex; gap:16px;">
+      <a href="ninety-eight.html">Home</a>
+      <a href="privacy.html">App Store Privacy Labels</a>
+    </div>
+  </div>
+
+</main>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>
