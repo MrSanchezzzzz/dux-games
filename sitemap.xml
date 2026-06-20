@@ -7,9 +7,15 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://mrsanchezzzzz.github.io/dux-games/privacy-policy.html</loc>
+    <loc>https://mrsanchezzzzz.github.io/dux-games/wincode-98/privacy-policy.html</loc>
     <lastmod>2026-06-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://mrsanchezzzzz.github.io/dux-games/posts/wincode-98-nostalgia.html</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

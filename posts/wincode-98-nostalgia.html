@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Windows 98 Nostalgia: We Built a Game That Takes Programmers Back to the 90s — DUX Games</title>
+<meta name="description" content="A free nostalgic clicker sim about the journey from machine code to the modern AI & Cloud era, built in the style of old-school computer interfaces." />
+<link rel="icon" type="image/png" href="../assets/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  .post-hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background: radial-gradient(circle at 50% 60%, var(--green-dim), transparent 60%), var(--bg-2);
+    padding: 88px 0 72px;
+  }
+  .post-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 38px 38px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .post-hero .container { position: relative; z-index: 1; max-width: 760px; }
+  .post-hero .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 48px;
+    transition: color .15s ease;
+  }
+  .post-hero .back:hover { color: var(--ink); }
+  .post-hero .back-arrow { display: inline-block; transition: transform .18s ease; }
+  .post-hero .back:hover .back-arrow { transform: translateX(-3px); }
+  .post-hero .post-meta { margin-bottom: 24px; }
+  .post-hero h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin: 0 0 24px;
+  }
+  .post-hero .lede {
+    font-size: clamp(16px, 1.5vw, 19px);
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .post-body {
+    padding: 72px 0 96px;
+  }
+  .post-body .container { max-width: 760px; }
+
+  .prose p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink);
+    margin: 0 0 24px;
+  }
+  .prose strong { color: var(--ink); font-weight: 700; }
+
+  .prose h2 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(22px, 2.4vw, 28px);
+    letter-spacing: -0.015em;
+    margin: 56px 0 20px;
+    line-height: 1.1;
+  }
+
+  .prose .post-img {
+    margin: 40px 0 32px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .prose .post-img img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .prose .post-img figcaption {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-2);
+    padding: 14px 18px;
+    border-top: 1px solid var(--line);
+    background: var(--bg-2);
+    line-height: 1.5;
+  }
+
+  .prose .era-list {
+    margin: 0 0 24px;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .prose .era-list li {
+    display: flex;
+    gap: 14px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .prose .era-list li::before {
+    content: "";
+    flex-shrink: 0;
+    margin-top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px rgba(47,107,255,0.5);
+  }
+  .prose .era-list li strong { color: var(--green); }
+
+  .post-footer-nav {
+    border-top: 1px solid var(--line);
+    padding: 44px 0;
+  }
+  .post-footer-nav .container { max-width: 760px; }
+
+  @media (max-width: 720px) {
+    .post-hero { padding: 60px 0 52px; }
+    .post-hero .back { margin-bottom: 32px; }
+    .post-body { padding: 52px 0 72px; }
+    .prose .post-img { margin: 28px 0 24px; }
+  }
+</style>
+</head>
+<body style="font-family: Manrope">
+<div class="shell">
+
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="../index.html" aria-label="DUX Games — home">
+        <img src="../assets/dux-logo-horizontal-white.png" alt="DUX Games" />
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="nav-links" id="navLinks">
+        <a class="link" href="../index.html#games">Games</a>
+        <a class="link" href="../index.html#journal">Journal</a>
+        <a class="link" href="../index.html#contact">Contact</a>
+        <a class="btn btn-primary" href="../wincode-98/index.html">Play WinCode 98 <span class="arrow">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ POST HERO ============ -->
+    <section class="post-hero">
+      <div class="container">
+        <a class="back" href="../index.html#journal"><span class="back-arrow">←</span> Journal</a>
+        <div class="post-meta">
+          <span class="cat" style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);">Devlog</span>
+          <span style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted-2);margin-left:12px;">June 20, 2026</span>
+        </div>
+        <h1>Windows 98 Nostalgia: We Built a Game That Takes Programmers Back to the 90s</h1>
+        <p class="lede">A free nostalgic clicker sim about the journey from machine code to the modern AI&nbsp;&amp;&nbsp;Cloud era, built in the style of old-school computer interfaces.</p>
+      </div>
+    </section>
+
+    <!-- ============ POST BODY ============ -->
+    <section class="post-body">
+      <div class="container">
+        <article class="prose">
+
+          <p>We built <strong>WinCode 98</strong> — a free programmer clicker sim styled after old-school computer interfaces.</p>
+
+          <p>It's a game for people who love code, retro aesthetics, idle/clicker games, and that feeling of slow, satisfying progress. We didn't want to make just another clicker — we wanted to capture the atmosphere of the 90s: grey windows, pixel buttons, plain menus, system alerts, and that exact mood of an old computer.</p>
+
+          <figure class="post-img">
+            <img src="../assets/posts/wincode-98/screen-main.png" alt="WinCode 98 main screen" />
+            <figcaption>WinCode 98 — a nostalgic programmer clicker sim inspired by the aesthetics of old-school computer interfaces.</figcaption>
+          </figure>
+
+          <p>In WinCode 98, the player follows a programmer's journey from the very beginning all the way to the modern AI&nbsp;&amp;&nbsp;Cloud era. The core mechanic clicks into place within seconds: tap to write code, earn money from projects, buy upgrades, and level up your programmer across 5 technology eras.</p>
+
+          <p>But progress in the game isn't just bigger numbers. Each new era feels like the next step in the history of programming.</p>
+
+          <figure class="post-img">
+            <img src="../assets/posts/wincode-98/screen-gameplay.png" alt="WinCode 98 main gameplay screen" />
+            <figcaption>Write code, earn money, unlock upgrades, and develop your programmer.</figcaption>
+          </figure>
+
+          <h2>5 Eras of Programming History</h2>
+
+          <ul class="era-list">
+            <li><strong>Machine Era</strong> — the beginning: raw commands and machine-level thinking.</li>
+            <li><strong>Procedural Era</strong> — the age of functions, algorithms, and structured code.</li>
+            <li><strong>OOP Era</strong> — classes, objects, architecture, and more complex projects.</li>
+            <li><strong>Internet Era</strong> — the web, servers, networks, and online products.</li>
+            <li><strong>AI &amp; Cloud Era</strong> — the modern stage: cloud tech, automation, and artificial intelligence.</li>
+          </ul>
+
+          <figure class="post-img">
+            <img src="../assets/posts/wincode-98/screen-eras.png" alt="WinCode 98 first and last era collage" />
+            <figcaption>From machine code to AI &amp; Cloud — the player progresses through 5 eras of programming history.</figcaption>
+          </figure>
+
+          <h2>Upgrades, Projects, and Random Events</h2>
+
+          <p>To keep the run from feeling repetitive, the game includes upgrades, projects, and random events. Upgrades help you grow faster. Projects open up new possibilities.</p>
+
+          <p>Random events keep things dynamic. Sometimes a client leaves a tip, giving the player a welcome bonus. Other times a challenge appears that needs solving — pull it off and you'll earn a reward that accelerates your programmer's growth.</p>
+
+          <p>Because programming isn't always a straight line. Sometimes everything works on the first try. Sometimes there's a bug. Sometimes an unexpected event changes the whole pace of the game.</p>
+
+          <figure class="post-img">
+            <img src="../assets/posts/wincode-98/screen-upgrades.png" alt="WinCode 98 upgrades screen" />
+          </figure>
+
+          <figure class="post-img">
+            <img src="../assets/posts/wincode-98/screen-event.png" alt="WinCode 98 random event screen" />
+            <figcaption>Upgrades and random events make your progression faster, more interesting, and less predictable.</figcaption>
+          </figure>
+
+          <h2>Retro Style Inspired by the 90s</h2>
+
+          <p>Visually, we designed WinCode 98 in a retro style inspired by late-90s interfaces. We wanted the game to look like something you could have found on an old computer — but still feel comfortable for a modern player.</p>
+
+          <p>WinCode 98 is free to play. We want as many players as possible to try it, walk the path from Machine Era to AI&nbsp;&amp;&nbsp;Cloud, and soak in the nostalgic atmosphere of an old computer.</p>
+
+          <figure class="post-img">
+            <img src="../assets/posts/wincode-98/screen-banner.png" alt="WinCode 98 — Free on release, Coming soon on App Store" />
+            <figcaption>WinCode 98 is a free programmer clicker sim. The game is currently in testing and heading to the App Store.</figcaption>
+          </figure>
+
+          <p>WinCode 98 is worth trying if you're a programmer, or anyone who loves clicker games, retro computers, and the story of how technology evolved.</p>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ POST FOOTER NAV ============ -->
+    <div class="post-footer-nav">
+      <div class="container">
+        <a class="back" href="../index.html#journal" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .15s ease;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">← All posts</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="left">
+        <img src="../assets/dux-duck-mark.png" alt="DUX Games" />
+        <span class="copy">© 2026 DUX Games</span>
+      </div>
+      <div class="socials">
+        <a href="#">X</a>
+        <a href="#">Discord</a>
+        <a href="mailto:kremenchuksh@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ BACK TO TOP ============ -->
+  <button class="to-top" id="toTop" aria-label="Back to top">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="M6 10V2M6 2L2 6M6 2l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Top
+  </button>
+
+</div>
+<script src="../script.js"></script>
+</body>
+</html>
