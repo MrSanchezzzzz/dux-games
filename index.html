@@ -5,36 +5,49 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DUX Games — Indie Game Studio</title>
 <meta name="description" content="DUX Games is a tiny independent studio making playful games for people who love — and occasionally fear — computers. Makers of WinCode 98." />
+<link rel="canonical" href="https://mrsanchezzzzz.github.io/dux-games/" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://mrsanchezzzzz.github.io/dux-games/" />
+<meta property="og:site_name" content="DUX Games" />
+<meta property="og:title" content="DUX Games — Indie Game Studio" />
+<meta property="og:description" content="DUX Games is a tiny independent studio making playful games for people who love — and occasionally fear — computers. Makers of WinCode 98." />
+<meta property="og:image" content="https://mrsanchezzzzz.github.io/dux-games/assets/posts/wincode-98/cover.webp" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="DUX Games — Indie Game Studio" />
+<meta name="twitter:description" content="DUX Games is a tiny independent studio making playful games for people who love — and occasionally fear — computers. Makers of WinCode 98." />
+<meta name="twitter:image" content="https://mrsanchezzzzz.github.io/dux-games/assets/posts/wincode-98/cover.webp" />
+
+<!-- JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "DUX Games",
+  "url": "https://mrsanchezzzzz.github.io/dux-games/",
+  "logo": "https://mrsanchezzzzz.github.io/dux-games/assets/dux-logo-horizontal-white.png",
+  "description": "Tiny independent game studio. Makers of WinCode 98.",
+  "email": "kremenchuksh@gmail.com",
+  "sameAs": []
+}
+</script>
+
 <link rel="icon" type="image/png" href="assets/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
-<link id="gfont-Karla" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&amp;display=swap">
-<link id="gfont-Manrope" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap">
 </head>
 <body style="font-family: Manrope">
+<script src="components.js"></script>
 <div class="shell">
 
   <!-- ============ NAV ============ -->
-  <header class="nav">
-    <div class="container nav-inner">
-      <a class="brand" href="#top" aria-label="DUX Games — home">
-        <img src="assets/dux-logo-horizontal-white.png" alt="DUX Games" />
-      </a>
-      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <nav class="nav-links" id="navLinks">
-        <a class="link" href="#games">Games</a>
-        <a class="link" href="#journal">Journal</a>
-        <a class="link" href="#contact">Contact</a>
-        <a class="btn btn-primary" href="wincode-98/index.html">Play WinCode 98 <span class="arrow">↗</span></a>
-      </nav>
-    </div>
-  </header>
+  <dux-nav></dux-nav>
 
   <main id="top">
 
@@ -180,27 +193,10 @@
   </main>
 
   <!-- ============ FOOTER ============ -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="left">
-        <img src="assets/dux-duck-mark.png" alt="DUX Games" />
-        <span class="copy">© 2026 DUX Games</span>
-      </div>
-      <div class="socials">
-        <a href="#">X</a>
-        <a href="#">Discord</a>
-        <a href="mailto:kremenchuksh@gmail.com">Email</a>
-      </div>
-    </div>
-  </footer>
+  <dux-footer></dux-footer>
 
   <!-- ============ BACK TO TOP ============ -->
-  <button class="to-top" id="toTop" aria-label="Back to top">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-      <path d="M6 10V2M6 2L2 6M6 2l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Top
-  </button>
+  <dux-to-top></dux-to-top>
 
 </div>
 
