@@ -177,17 +177,4 @@
     }
   }
 
-  /* ---------- theme toggle ---------- */
-  var themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', function () {
-      var current = document.documentElement.getAttribute('data-theme');
-      var systemLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-      var effective = current || (systemLight ? 'light' : 'dark');
-      var next = effective === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-    });
-  }
-
 })();
