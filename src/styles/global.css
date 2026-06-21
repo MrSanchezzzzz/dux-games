@@ -14,8 +14,8 @@
   --muted:     #8a8f88;
   --muted-2:   #5f635e;
 
-  --green:       #2f6bff;  /* DUX blue */
-  --green-deep:  #1538b8;  /* deep blue */
+  --green:       #2f6bff;
+  --green-deep:  #1538b8;
   --green-dim:   rgba(47,107,255,0.16);
 
   --maxw: 1360px;
@@ -25,6 +25,21 @@
   --sans:  'Manrope', sans-serif;
   --mono:  'JetBrains Mono', monospace;
 }
+
+/* Light theme */
+:root[data-theme="light"],
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg:        #f8f9f6;
+  --bg-2:      #f0f1ee;
+  --bg-3:      #e8e9e6;
+  --panel:     #f4f5f2;
+  --line:      rgba(0,0,0,0.10);
+  --line-2:    rgba(0,0,0,0.16);
+  --ink:       #0d0e0c;
+  --muted:     #5a5f58;
+  --muted-2:   #8a8f88;
+  --green-dim: rgba(47,107,255,0.10);
+} }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -54,6 +69,12 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
+:root[data-theme="light"] body::before,
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) body::before {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+} }
 
 .shell { position: relative; z-index: 1; }
 
@@ -156,6 +177,40 @@ body::before {
 .brand { display: flex; align-items: center; gap: 13px; }
 .brand img { height: 52px; width: auto; }
 .nav-links { display: flex; align-items: center; gap: 34px; }
+
+/* logo swap */
+.logo-light { display: none; }
+:root[data-theme="light"] .logo-dark { display: none; }
+:root[data-theme="light"] .logo-light { display: block; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .logo-dark { display: none; }
+  :root:not([data-theme="dark"]) .logo-light { display: block; }
+}
+
+/* theme toggle button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--line-2);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .15s ease, border-color .15s ease;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink); }
+.icon-sun { display: none; }
+:root[data-theme="light"] .icon-moon { display: none; }
+:root[data-theme="light"] .icon-sun { display: block; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .icon-moon { display: none; }
+  :root:not([data-theme="dark"]) .icon-sun { display: block; }
+}
 
 /* hamburger — hidden on desktop */
 .nav-toggle {
