@@ -16,7 +16,7 @@ interface Props {
 
 const { title, description, canonical, ogImage, publishedTime, tags = [], category, date, jsonLd } = Astro.props;
 ---
-<BaseLayout {title} {description} {canonical} {ogImage} type="article" {jsonLd}>
+<BaseLayout {title} {description} {canonical} {ogImage} type="article" {publishedTime} {category} {tags} {jsonLd}>
   <section class="post-hero">
     <div class="container">
       <slot name="hero" />

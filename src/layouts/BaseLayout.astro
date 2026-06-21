@@ -11,9 +11,12 @@ interface Props {
   ogImage?: string;
   type?: string;
   jsonLd?: string;
+  publishedTime?: string;
+  category?: string;
+  tags?: string[];
 }
 
-const { title, description, canonical, ogImage, type = 'website', jsonLd } = Astro.props;
+const { title, description, canonical, ogImage, type = 'website', jsonLd, publishedTime, category, tags } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const defaultOg = `${import.meta.env.SITE}${base}assets/posts/wincode-98/cover.webp`;
 const ogImg = ogImage ?? defaultOg;
@@ -25,20 +28,30 @@ const ogImg = ogImage ?? defaultOg;
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{title}</title>
 <meta name="description" content={description} />
+<meta name="robots" content="index, follow" />
+<meta name="author" content="DUX Games" />
+<meta name="theme-color" content="#0a0b0a" />
 <link rel="canonical" href={canonical} />
+<link rel="sitemap" type="application/xml" href={`${base}sitemap.xml`} />
+<link rel="icon" type="image/png" href={`${base}assets/favicon.png`} />
+<link rel="apple-touch-icon" href={`${base}assets/favicon.png`} />
 <meta property="og:type" content={type} />
 <meta property="og:url" content={canonical} />
 <meta property="og:site_name" content="DUX Games" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImg} />
+<meta property="og:image:alt" content={title} />
 <meta property="og:locale" content="en_US" />
+{type === 'article' && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{type === 'article' && category && <meta property="article:section" content={category} />}
+{type === 'article' && tags?.map(tag => <meta property="article:tag" content={tag} />)}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImg} />
+<meta name="twitter:image:alt" content={title} />
 {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
-<link rel="icon" type="image/png" href={`${base}assets/favicon.png`} />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
