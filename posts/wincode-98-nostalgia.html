@@ -125,11 +125,46 @@
     border-radius: 4px;
     overflow: hidden;
     border: 1px solid var(--line);
+    background-color: var(--bg-2);
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .prose .post-img img {
-    width: 100%;
+    width: 85%;
     height: auto;
     display: block;
+  }
+  .prose .post-img.phone img {
+    width: 32%;
+  }
+
+  .prose .post-img-pair {
+    display: flex;
+    gap: 12px;
+    margin: 40px 0 0;
+    align-items: stretch;
+  }
+  .prose .post-img-pair .post-img {
+    flex: 1;
+    margin: 0;
+  }
+  .prose .post-img-pair .post-img.phone img {
+    width: 65%;
+  }
+  .prose .post-img-pair-caption {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-2);
+    line-height: 1.5;
+    margin: 10px 0 32px !important;
+    text-align: center;
   }
   .prose .post-img figcaption {
     font-family: var(--mono);
@@ -141,6 +176,8 @@
     border-top: 1px solid var(--line);
     background: var(--bg-2);
     line-height: 1.5;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .prose .era-list {
@@ -181,6 +218,10 @@
     .post-hero .back { margin-bottom: 32px; }
     .post-body { padding: 52px 0 72px; }
     .prose .post-img { margin: 28px 0 24px; }
+    .prose .post-img img { width: 88%; }
+    .prose .post-img.phone img { width: 60%; }
+    .prose .post-img-pair { flex-direction: column; }
+    .prose .post-img-pair .post-img.phone img { width: 60%; }
   }
 </style>
 </head>
@@ -216,17 +257,17 @@
           <p>It's a game for people who love code, retro aesthetics, idle/clicker games, and that feeling of slow, satisfying progress. We didn't want to make just another clicker — we wanted to capture the atmosphere of the 90s: grey windows, pixel buttons, plain menus, system alerts, and that exact mood of an old computer.</p>
 
           <figure class="post-img">
-            <img src="../assets/posts/wincode-98/screen-main.png" alt="WinCode 98 main screen" />
-            <figcaption>WinCode 98 — a nostalgic programmer clicker sim inspired by the aesthetics of old-school computer interfaces.</figcaption>
+            <img src="../assets/posts/wincode-98/cover.webp" alt="WinCode 98 main screen" />
+            <!-- <figcaption>WinCode 98 — a nostalgic programmer clicker sim inspired by the aesthetics of old-school computer interfaces.</figcaption> -->
           </figure>
 
           <p>In WinCode 98, the player follows a programmer's journey from the very beginning all the way to the modern AI&nbsp;&amp;&nbsp;Cloud era. The core mechanic clicks into place within seconds: tap to write code, earn money from projects, buy upgrades, and level up your programmer across 5 technology eras.</p>
 
           <p>But progress in the game isn't just bigger numbers. Each new era feels like the next step in the history of programming.</p>
 
-          <figure class="post-img">
-            <img src="../assets/posts/wincode-98/screen-gameplay.png" alt="WinCode 98 main gameplay screen" />
-            <figcaption>Write code, earn money, unlock upgrades, and develop your programmer.</figcaption>
+          <figure class="post-img phone">
+            <img src="../assets/posts/wincode-98/write-code.webp" alt="WinCode 98 main gameplay screen" />
+            <!-- <figcaption>Write code, earn money, unlock upgrades, and develop your programmer.</figcaption> -->
           </figure>
 
           <h2>5 Eras of Programming History</h2>
@@ -239,9 +280,9 @@
             <li><strong>AI &amp; Cloud Era</strong> — the modern stage: cloud tech, automation, and artificial intelligence.</li>
           </ul>
 
-          <figure class="post-img">
-            <img src="../assets/posts/wincode-98/screen-eras.png" alt="WinCode 98 first and last era collage" />
-            <figcaption>From machine code to AI &amp; Cloud — the player progresses through 5 eras of programming history.</figcaption>
+          <figure class="post-img phone">
+            <img src="../assets/posts/wincode-98/travel-tech-eras.webp" alt="WinCode 98 first and last era collage" />
+            <!-- <figcaption>From machine code to AI &amp; Cloud — the player progresses through 5 eras of programming history.</figcaption> -->
           </figure>
 
           <h2>Upgrades, Projects, and Random Events</h2>
@@ -252,14 +293,15 @@
 
           <p>Because programming isn't always a straight line. Sometimes everything works on the first try. Sometimes there's a bug. Sometimes an unexpected event changes the whole pace of the game.</p>
 
-          <figure class="post-img">
-            <img src="../assets/posts/wincode-98/screen-upgrades.png" alt="WinCode 98 upgrades screen" />
-          </figure>
-
-          <figure class="post-img">
-            <img src="../assets/posts/wincode-98/screen-event.png" alt="WinCode 98 random event screen" />
-            <figcaption>Upgrades and random events make your progression faster, more interesting, and less predictable.</figcaption>
-          </figure>
+          <div class="post-img-pair">
+            <figure class="post-img phone">
+              <img src="../assets/posts/wincode-98/unlock-&-boost.webp" alt="WinCode 98 upgrades screen" />
+            </figure>
+            <figure class="post-img phone">
+              <img src="../assets/posts/wincode-98/solve-challenges.webp" alt="WinCode 98 random event screen" />
+            </figure>
+          </div>
+          <!-- <p class="post-img-pair-caption">Upgrades and random events make your progression faster, more interesting, and less predictable.</p> -->
 
           <h2>Retro Style Inspired by the 90s</h2>
 
@@ -267,9 +309,9 @@
 
           <p>WinCode 98 is free to play. We want as many players as possible to try it, walk the path from Machine Era to AI&nbsp;&amp;&nbsp;Cloud, and soak in the nostalgic atmosphere of an old computer.</p>
 
-          <figure class="post-img">
-            <img src="../assets/posts/wincode-98/screen-banner.png" alt="WinCode 98 — Free on release, Coming soon on App Store" />
-            <figcaption>WinCode 98 is a free programmer clicker sim. The game is currently in testing and heading to the App Store.</figcaption>
+          <figure class="post-img phone">
+            <img src="../assets/posts/wincode-98/promo.webp" alt="WinCode 98 — Free on release, Coming soon on App Store" />
+            <!-- <figcaption>WinCode 98 is a free programmer clicker sim. The game is currently in testing and heading to the App Store.</figcaption> -->
           </figure>
 
           <p>WinCode 98 is worth trying if you're a programmer, or anyone who loves clicker games, retro computers, and the story of how technology evolved.</p>
