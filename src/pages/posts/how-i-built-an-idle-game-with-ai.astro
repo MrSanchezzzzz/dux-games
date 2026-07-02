@@ -17,6 +17,35 @@ const jsonLd = JSON.stringify({
   "publisher": { "@type": "Organization", "name": "DUX Games", "url": "https://mrsanchezzzzz.github.io/dux-games/" },
   "url": "https://mrsanchezzzzz.github.io/dux-games/posts/how-i-built-an-idle-game-with-ai/"
 });
+
+// Price-curve chart: points precomputed at build time, log-10 y scale.
+const L12 = Math.log10(1.12), L5 = Math.log10(1.0005);
+const cx = (n) => +(52 + (n / 50) * 536).toFixed(1);
+const cy = (lg) => +(360 - (lg / 3.2) * 340).toFixed(1);
+const curvePts = Array.from({ length: 51 }, (_, n) => `${cx(n)},${cy(n * L12 + n * n * L5)}`).join(' ');
+const expPts = Array.from({ length: 51 }, (_, n) => `${cx(n)},${cy(n * L12)}`).join(' ');
+const gridY = [0, 1, 2, 3].map((g) => ({ y: cy(g), label: '×' + (10 ** g).toLocaleString('en-US') }));
+const tickX = [0, 10, 20, 30, 40, 50].map((n) => ({ x: cx(n), label: n }));
+const endCurveY = cy(50 * L12 + 2500 * L5);
+const endExpY = cy(50 * L12);
+
+// Shop chart: cost in clicks vs income per click, log-log. t = log10(income), 0..4.
+const sx = (t) => +(52 + (t / 4) * 536).toFixed(1);
+const sy = (lgClicks) => +(360 - ((lgClicks + 3) / 5) * 340).toFixed(1);
+const lg45 = Math.log10(45);
+const anchoredPts = `${sx(0)},${sy(lg45)} ${sx(4)},${sy(lg45)}`;
+const fixedPts = `${sx(0)},${sy(lg45)} ${sx(4)},${sy(lg45 - 4)}`;
+const shopGridY = [-3, -2, -1, 0, 1, 2].map((g) => ({ y: sy(g), label: g >= 0 ? String(10 ** g) : (10 ** g).toFixed(-g) }));
+const shopTickX = ['$1', '$10', '$100', '$1K', '$10K'].map((label, i) => ({ x: sx(i), label }));
+
+// XP chart: XP required per level, linear y 0..25K, levels 1..20.
+const xx = (l) => +(52 + ((l - 1) / 19) * 536).toFixed(1);
+const xy = (xp) => +(360 - (xp / 25000) * 340).toFixed(1);
+const xpAt = (l) => 60 * l * l * 1.0001 ** (l * l);
+const xpPts = Array.from({ length: 39 }, (_, i) => { const l = 1 + i * 0.5; return `${xx(l)},${xy(xpAt(l))}`; }).join(' ');
+const xpGridY = [0, 5000, 10000, 15000, 20000, 25000].map((v) => ({ y: xy(v), label: v ? v / 1000 + 'K' : '0' }));
+const xpTickX = [1, 5, 10, 15, 20].map((l) => ({ x: xx(l), label: l }));
+const xpEndY = xy(xpAt(20));
 ---
 <PostLayout
   {title}
@@ -36,7 +65,7 @@ const jsonLd = JSON.stringify({
       <span class="date">July 2, 2026</span>
     </div>
     <h1>How I Built an iOS Idle Game in 2 Months, Solo, with Claude Code</h1>
-    <p class="lede">The full postmortem of WinCode 98: designing the mechanics, balancing an economy where everything stacks multiplicatively, and how Claude Code turned a side project into a shipped App Store game.</p>
+    <p class="lede">The full postmortem of WinCode 98: the three problems that almost broke the game, the pricing curves that hold its economy together, and how Claude Code turned a side project into a shipped App Store game.</p>
   </Fragment>
 
   <p>Two months ago, <strong>WinCode 98</strong> was a note on my phone. Today it's a finished idle game on the iOS App Store — five historical eras of programming, 300+ upgrades, 25 skills, 13 languages, projects, random events, and a full Windows 98-style interface. I built it alone, in the evenings, next to a full-time job.</p>
@@ -49,38 +78,166 @@ const jsonLd = JSON.stringify({
 
   <h2>Why a Programming Idle Game?</h2>
 
-  <p>I'm a programmer by education and a mobile developer by trade, so the theme picked itself: a clicker where you live through the history of programming, from 1940s punch cards to the modern AI &amp; Cloud era. When I searched the App Store, I found farming clickers, mining clickers, restaurant clickers — but no good idle game <em>about programming itself</em>. That gap was the green light.</p>
+  <p>I'm a programmer by education and a mobile developer by trade, so the theme picked itself: a clicker where you live through the history of programming, from 1940s punch cards to the modern AI &amp; Cloud era. When I searched the App Store, I found farming clickers, mining clickers, restaurant clickers — but no good idle game about programming itself. That gap was the green light.</p>
 
-  <p>An idle game was also the right scope for a first solo release. The genre lives or dies on numbers and pacing, not on animation-heavy content — which means one person with taste and a calculator can realistically compete.</p>
-
-  <h2>The Core Loop: Click, Upgrade, Advance an Era</h2>
-
-  <p>Every click writes code and earns money and XP — and costs 1 energy, which regenerates passively. Money goes into upgrades, skills, languages, and workspace locations; XP levels you up and unlocks new content; and completing an era grants a <em>permanent</em> bonus that compounds into everything after it — Era 1 gives +25% click income forever, Era 5 gives +25% to all income. It works like a prestige system, except you never reset: history only moves forward.</p>
+  <p>An idle game was also the right scope for a first solo release. The genre lives or dies on numbers and pacing, not on animation-heavy content — which means one person with taste and a calculator can realistically compete. The concept fits in one sentence: you tap to write code, code earns money and XP, and both feed a growing web of upgrades, skills, languages, and workspaces.</p>
 
   <figure class="post-img phone">
     <img src={`${base}assets/promo-screens/wincode-98/1.png`} alt="WinCode 98 main screen — tap to write code, with XP, energy, and money bars in a Windows 98 interface" />
   </figure>
 
-  <p>On top of the loop sit projects and events. Projects are click-driven jobs with a twist every programmer will recognize: each click has a small bug chance (4–10%), and a spawned bug penalizes your income until you fix it. Random events fire on roughly one in five clicks — a client tip, a challenge, a timed buff. And every click can crit: 12% chance of ×2, 2% chance of ×10.</p>
+  <h2>Three Problems That Almost Broke the Game</h2>
 
-  <div class="post-img-pair">
-    <figure class="post-img phone">
-      <img src={`${base}assets/promo-screens/wincode-98/3.png`} alt="WinCode 98 projects screen — click-driven jobs with rewards and first-clear bonuses" />
-    </figure>
-    <figure class="post-img phone">
-      <img src={`${base}assets/promo-screens/wincode-98/5.png`} alt="WinCode 98 random choice event — a system notification with three reward options" />
-    </figure>
-  </div>
+  <p>The design document survived first contact with a real build for about a day. Three problems in particular forced actual redesigns — and each one taught me more than any tutorial could.</p>
 
-  <p>Every mechanic had to answer one question: does it make the next tap, or the next return to the game, more interesting? If not, it got cut. Two months is not a lot of time, and the fastest feature to build is the one you don't.</p>
+  <h3>Problem 1: Money Stopped Meaning Anything</h3>
+
+  <p>In the first playable version, projects paid out far too much. Two or three completed projects and you could afford every upgrade on the screen — the numbers went up, but choice disappeared, and with it the entire point of an economy. Money had lost its value.</p>
+
+  <p>The fix was not just cutting rewards. Repeat completions of a project now sit on their own curve: each repeat pays more but also gets harder, with reward outpacing difficulty roughly 2:1 — grinding a favorite project stays profitable, but with diminishing returns per click. And upgrade prices got a curve that is mathematically guaranteed to outrun income growth (more on that below). The lesson: in an idle game, inflation is not a bug you patch once — it's a force you design against everywhere.</p>
+
+  <figure class="post-img phone">
+    <img src={`${base}assets/promo-screens/wincode-98/3.png`} alt="WinCode 98 projects screen — click-driven jobs with rewards and first-clear bonuses" />
+  </figure>
+
+  <h3>Problem 2: The Phone Ran Hot</h3>
+
+  <p>The first build was pure SwiftUI — interface, floating income numbers, click effects, every animation. SwiftUI is fantastic for the interface, but it was never meant to be a particle engine: dozens of animated views spawning per second sent CPU usage through the roof, and my test device got noticeably warm after a few minutes of tapping.</p>
+
+  <p>The solution was to split the responsibilities: SwiftUI keeps drawing the windows, buttons, and menus, while the animation layer moved to SpriteKit — Apple's 2D game framework, embedded straight into the SwiftUI hierarchy. Floating numbers and click effects became sprites in a single scene instead of a swarm of short-lived views. CPU usage dropped sharply, the heat was gone, and the interface code didn't change at all. If you're building anything animation-heavy in SwiftUI, this hybrid is the escape hatch.</p>
+
+  <h3>Problem 3: The Game Had No Goal</h3>
+
+  <p>The third problem was quieter but more dangerous: after the first hour, the game had nothing to aim at. Numbers grew, upgrades unlocked, and none of it led anywhere — the classic idle-game death spiral where the player stops because there's no next thing.</p>
+
+  <p>The answer became the backbone of the whole game: five technological eras — Machine Code, Procedural, OOP, Internet, and Cloud &amp; AI — that the player advances through over the entire playthrough. Each era has its own unique upgrades and projects, so entering a new one genuinely changes what you're doing, and finishing an era grants a permanent compounding bonus that carries into everything after it. The eras gave the game a destination: the player always knows where they are in the history of programming, and what comes next.</p>
+
+  <figure class="post-img phone">
+    <img src={`${base}assets/promo-screens/wincode-98/2.png`} alt="WinCode 98 five eras of programming — Machine Code, Procedural, OOP, Internet, Cloud & AI" />
+  </figure>
 
   <h2>Balancing an Economy Where Everything Multiplies</h2>
 
-  <p>Balancing is where idle games are secretly hard. In WinCode 98, upgrades, skills, languages, locations, era bonuses, and timed boosts all stack <em>multiplicatively</em> — which is great for that snowball feeling and terrifying for the person tuning the numbers. A few design decisions kept it under control:</p>
+  <p>Balancing is where idle games are secretly hard. In WinCode 98, upgrades, skills, languages, locations, era bonuses, and timed boosts all stack multiplicatively — which is great for that snowball feeling and terrifying for the person tuning the numbers. The economy ended up resting on three families of pricing curves, each one shaped by a specific failure mode.</p>
+
+  <p><strong>1. Upgrade and skill prices: exponential with a quadratic accelerator.</strong> The formula is <code>price(n) = base × 1.12ⁿ × 1.0005^(n²)</code> — skills use 1.15 instead of 1.12. The first factor is the classic incremental-game exponential. The second looks like noise, but it compounds on n², so the growth rate itself rises with level: invisible at level 5, ×1.2 at level 20, ×3.5 at level 50. Why bother? Because a pure exponential eventually loses. Stacked multiplicative income bonuses grow faster than any fixed rate, and a late-game player would buy every level instantly. The quadratic term guarantees the price curve always overtakes income — a built-in soft cap with no hard wall. On a log scale you can see exactly what the accelerator does: a pure exponential is a straight line, and the real curve quietly bends away from it.</p>
+
+  <figure class="post-img chart-fig" id="price-curve">
+    <svg viewBox="0 0 720 430" role="img" aria-labelledby="pc-title pc-desc">
+      <title id="pc-title">Idle game upgrade price curve: exponential with a quadratic accelerator vs pure exponential</title>
+      <desc id="pc-desc">Line chart of upgrade price growth over 50 levels on a logarithmic scale, from the incremental game WinCode 98. A pure 12% exponential (1.12 to the power n) is a straight line reaching ×289 at level 50. The WinCode 98 price curve multiplies it by 1.0005 to the power n squared, so it bends away and reaches ×1,009 — 3.5 times higher. The two curves are nearly identical for the first 15 levels; the quadratic accelerator guarantees prices always outrun stacked multiplicative income bonuses, acting as a soft cap on infinite upgrade buying.</desc>
+      {gridY.map((g) => (
+        <Fragment>
+          <line x1="52" y1={g.y} x2="588" y2={g.y} class="grid" />
+          <text x="44" y={g.y + 4} text-anchor="end" class="tick">{g.label}</text>
+        </Fragment>
+      ))}
+      {tickX.map((t) => (
+        <text x={t.x} y="382" text-anchor="middle" class="tick">{t.label}</text>
+      ))}
+      <line x1="52" y1="360" x2="588" y2="360" class="axis" />
+      <text x="320" y="412" text-anchor="middle" class="axis-label">upgrade level</text>
+      <polyline points={expPts} class="line-exp" />
+      <polyline points={curvePts} class="line-curve" />
+      <g class="cross" id="pc-cross" style="opacity:0">
+        <line x1="52" y1="20" x2="52" y2="360" class="cross-line" />
+        <circle r="4" class="dot-curve" />
+        <circle r="4" class="dot-exp" />
+      </g>
+      <circle cx="588" cy={endCurveY} r="4" class="dot-curve" />
+      <circle cx="588" cy={endExpY} r="4" class="dot-exp" />
+      <text x="598" y={endCurveY - 2} class="end-name">WinCode 98</text>
+      <text x="598" y={endCurveY + 14} class="end-val">×1,009</text>
+      <text x="598" y={endExpY + 4} class="end-name">Pure 1.12ⁿ</text>
+      <text x="598" y={endExpY + 20} class="end-val">×289</text>
+      <g class="legend">
+        <line x1="52" y1="8" x2="70" y2="8" class="line-curve" />
+        <text x="76" y="12">price curve 1.12ⁿ × 1.0005^(n²)</text>
+        <line x1="300" y1="8" x2="318" y2="8" class="line-exp" />
+        <text x="324" y="12">pure exponential 1.12ⁿ</text>
+      </g>
+      <text x="588" y="412" text-anchor="end" class="readout" id="pc-readout"></text>
+      <rect x="52" y="20" width="536" height="340" fill="transparent" id="pc-hover" />
+    </svg>
+    <figcaption>Idle game price balancing: upgrade cost as a multiple of base price over 50 levels, log scale — hover to compare</figcaption>
+  </figure>
+
+  <p><strong>2. Shop consumables: linear, priced in clicks.</strong> Every consumable scales with current income: <code>price = base × income&nbsp;per&nbsp;click</code>. Not exponential at all — deliberately. Coffee always costs about 45 clicks of effort whether a click earns $2 or $2M, so the shop stays relevant at every stage without ever being retuned. And every energy item restores fewer clicks than it costs — Coffee is 45 clicks paid for 30 restored — because the reverse would be a free-money loop of buy, click, rebuy.</p>
+
+  <figure class="post-img chart-fig" id="shop-curve">
+    <svg viewBox="0 0 720 430" role="img" aria-labelledby="sc-title sc-desc">
+      <title id="sc-title">Idle game shop pricing: click-anchored cost vs a fixed money price as income grows</title>
+      <desc id="sc-desc">Log-log line chart of consumable cost measured in clicks of effort, as income per click grows from $1 to $10,000, from the incremental game WinCode 98. A fixed $45 money price starts at 45 clicks and collapses in a straight line to about 0.005 clicks — effectively free. The click-anchored price, base times income per click, stays flat at 45 clicks at every income level, keeping the shop relevant at every progression stage without retuning.</desc>
+      {shopGridY.map((g) => (
+        <Fragment>
+          <line x1="52" y1={g.y} x2="588" y2={g.y} class="grid" />
+          <text x="44" y={g.y + 4} text-anchor="end" class="tick">{g.label}</text>
+        </Fragment>
+      ))}
+      {shopTickX.map((t) => (
+        <text x={t.x} y="382" text-anchor="middle" class="tick">{t.label}</text>
+      ))}
+      <line x1="52" y1="360" x2="588" y2="360" class="axis" />
+      <text x="320" y="412" text-anchor="middle" class="axis-label">income per click</text>
+      <polyline points={fixedPts} class="line-exp" />
+      <polyline points={anchoredPts} class="line-curve" />
+      <g class="cross" style="opacity:0">
+        <line x1="52" y1="20" x2="52" y2="360" class="cross-line" />
+        <circle r="4" class="dot-curve" />
+        <circle r="4" class="dot-exp" />
+      </g>
+      <circle cx="588" cy={sy(lg45)} r="4" class="dot-curve" />
+      <circle cx="588" cy={sy(lg45 - 4)} r="4" class="dot-exp" />
+      <text x="598" y={sy(lg45) - 2} class="end-name">Click-anchored</text>
+      <text x="598" y={sy(lg45) + 14} class="end-val">45 clicks</text>
+      <text x="598" y={sy(lg45 - 4) - 2} class="end-name">Fixed $45</text>
+      <text x="598" y={sy(lg45 - 4) + 14} class="end-val">≈ free</text>
+      <g class="legend">
+        <line x1="52" y1="8" x2="70" y2="8" class="line-curve" />
+        <text x="76" y="12">price = base × income per click</text>
+        <line x1="300" y1="8" x2="318" y2="8" class="line-exp" />
+        <text x="324" y="12">fixed money price</text>
+      </g>
+      <text x="588" y="412" text-anchor="end" class="readout"></text>
+      <rect x="52" y="20" width="536" height="340" fill="transparent" />
+    </svg>
+    <figcaption>Idle game shop balancing: cost in clicks of effort vs income per click, log-log — hover to compare</figcaption>
+  </figure>
+
+  <p><strong>3. XP requirements: quadratic, deliberately gentler.</strong> Leveling follows <code>XP(level) = 60 × level²</code> with a tiny accelerator that only bites near the level cap. Wealth explodes exponentially, but levels must stay achievable — pace progression on the same curve as prices and the player stalls; pace it quadratically and every session still ends with visible progress.</p>
+
+  <figure class="post-img chart-fig" id="xp-curve">
+    <svg viewBox="0 0 720 430" role="img" aria-labelledby="xc-title xc-desc">
+      <title id="xc-title">Idle game level pacing: quadratic XP requirement curve from level 1 to 20</title>
+      <desc id="xc-desc">Line chart of the XP required to reach the next level in the incremental game WinCode 98, following 60 times level squared with a tiny 1.0001 to the power level squared accelerator. It grows from 60 XP at level 1 to about 22,500 XP at level 19 — a quadratic curve, deliberately far gentler than the exponential upgrade prices, so leveling stays achievable while wealth explodes. The accelerator only adds a final-stretch slowdown near the level 20 cap.</desc>
+      {xpGridY.map((g) => (
+        <Fragment>
+          <line x1="52" y1={g.y} x2="588" y2={g.y} class="grid" />
+          <text x="44" y={g.y + 4} text-anchor="end" class="tick">{g.label}</text>
+        </Fragment>
+      ))}
+      {xpTickX.map((t) => (
+        <text x={t.x} y="382" text-anchor="middle" class="tick">{t.label}</text>
+      ))}
+      <line x1="52" y1="360" x2="588" y2="360" class="axis" />
+      <text x="320" y="412" text-anchor="middle" class="axis-label">player level</text>
+      <polyline points={xpPts} class="line-curve" />
+      <g class="cross" style="opacity:0">
+        <line x1="52" y1="20" x2="52" y2="360" class="cross-line" />
+        <circle r="4" class="dot-curve" />
+      </g>
+      <circle cx="588" cy={xpEndY} r="4" class="dot-curve" />
+      <text x="598" y={xpEndY + 4} class="end-name">level cap</text>
+      <text x="598" y={xpEndY + 20} class="end-val">≈25,000 XP</text>
+      <text x="588" y="412" text-anchor="end" class="readout"></text>
+      <rect x="52" y="20" width="536" height="340" fill="transparent" />
+    </svg>
+    <figcaption>Idle game level pacing: XP required for the next level, 60 XP at level 1 to ≈22,500 at level 19 — hover to inspect</figcaption>
+  </figure>
+
+  <p>Two more rules keep the multiplication under control:</p>
 
   <ul class="era-list cols">
-    <li><strong>The shop prices itself in clicks, not money.</strong> <span>Every consumable scales with income: <code>price = base × income&nbsp;per&nbsp;click</code>. Coffee is always 45 clicks at $2 or $2M per tap — never trivially cheap, never out of reach.</span></li>
-    <li><strong>Energy items must cost more than they return.</strong> <span>Coffee costs 45 clicks and restores 30. Reversed, buy&nbsp;→&nbsp;click&nbsp;→&nbsp;rebuy would be a free-money loop.</span></li>
     <li><strong>Inactive things stay 10% alive.</strong> <span>One language and one location are active at a time, but everything mastered keeps 10% of its bonus. Switching is a decision, not a punishment.</span></li>
     <li><strong>The endgame brakes itself.</strong> <span>Two infinite upgrades: price grows 12% per level, the bonus only 5% — a soft brake that keeps money meaningful after max level.</span></li>
   </ul>
@@ -89,32 +246,38 @@ const jsonLd = JSON.stringify({
     <img src={`${base}assets/promo-screens/wincode-98/4.png`} alt="WinCode 98 languages screen — owned languages keep a residual bonus while inactive, part of 300+ upgrades" />
   </figure>
 
-  <p>This, by the way, is the part AI helped with least. Claude Code can generate a plausible-looking cost formula in seconds, but it has no idea whether minute 40 of <em>your</em> game feels boring. The rules above came from playing my own build every evening and moving numbers by hand.</p>
+  <p>This, by the way, is the part AI helped with least. Claude Code can generate a plausible-looking cost formula in seconds, but it has no idea whether minute 40 of your game feels boring. The curves above came from playing my own build every evening and moving numbers by hand.</p>
 
   <h2>Vibe Coding a Game with Claude Code: My Actual Workflow</h2>
 
   <p>The workflow that emerged after the first couple of weeks looked like this:</p>
 
   <ul class="era-list cols">
-    <li><strong>I owned the design.</strong> <span>Every mechanic, formula, and screen started as my written spec — Claude Code never decided what the game <em>is</em>. Features went from my design document into prompts.</span></li>
+    <li><strong>I owned the design.</strong> <span>Every mechanic, formula, and screen started as my written spec — Claude Code never decided what the game is. Features went from my design document into prompts.</span></li>
     <li><strong>Claude Code wrote the first draft of almost everything.</strong> <span>UI layout, the save system, the upgrade data model, the event scheduler, offline income — I described the behavior, it produced working code far faster than I could type it.</span></li>
     <li><strong>ChatGPT drew the pixel art.</strong> <span>The era icons, item art, and event illustrations are AI-generated too. Claude Code handled the code, ChatGPT handled the pixels — a two-AI production with one human directing both.</span></li>
     <li><strong>I reviewed like it was a junior's pull request.</strong> <span>This is where the 3+ years of mobile development mattered. AI code compiles and usually works — but it duplicates state, misses lifecycle edge cases, and over-engineers simple things.</span></li>
     <li><strong>Iterations were brutally short.</strong> <span>Describe, generate, run on device, correct. A feature that used to be a weekend became an evening.</span></li>
   </ul>
 
-  <p>Call it vibe coding if you like — most of the code was AI-written, and I steered by describing behavior, not syntax. But it was vibe coding <em>with a code review</em>: nothing shipped that a human hadn't read. That one habit is, I suspect, the difference between the vibe-coded games that work and the ones that fall apart at the first edge case.</p>
-
-  <p>The honest summary: Claude Code didn't make the game. It removed the cost of typing, boilerplate, and looking things up — which for a solo evening project is the difference between shipping in two months and abandoning it in six.</p>
+  <p>Call it vibe coding if you like — most of the code was AI-written, and I steered by describing behavior, not syntax. But it was vibe coding with a code review: nothing shipped that a human hadn't read. That one habit is, I suspect, the difference between the vibe-coded games that work and the ones that fall apart at the first edge case.</p>
 
   <p>And the toolchain keeps moving. Anthropic's new <strong>Fable</strong> model landed just as I was working on monetization, and the newest feature in the game — optional rewarded ads that double a reward bonus, the only monetization WinCode 98 has — was my first feature built with it. Same describe–generate–review loop; the workflow survived the model swap unchanged.</p>
+
+  <h2>Ads That Ask Permission First</h2>
+
+  <p>Monetization was the feature I dreaded most, because idle games have a terrible reputation here: interstitials between screens, banners eating the layout, forced videos mid-session. I picked <strong>AdMob</strong> as the network — it's Google's, the most popular option on mobile, with the best fill rates and documentation — but the network was the easy decision. The hard one was where ads would live.</p>
+
+  <p>The rule I landed on: the game never shows an ad on its own. No banners, no interstitials, nothing interrupts play. Every ad in WinCode 98 is a rewarded video the player chooses to watch — double your offline income, double a project payout, get three minutes of infinite energy. Ignore them all and nothing is taken from you; the game is fully playable, start to finish, without watching a single one. Choose to watch and the ad feels like a bonus, not a toll.</p>
+
+  <p>Getting that to work took real balancing effort. Every placement has a cooldown or a per-session limit, and the rewards are tuned so they never replace in-game purchases — infinite energy is short and rate-limited precisely so Coffee and Red Bull stay relevant. The result is the compromise I wanted: players play in peace, the bonuses feel generous, and the game still earns something.</p>
 
   <h2>What Two Months Actually Looked Like</h2>
 
   <p>Roughly: the first weeks went to the core loop and the Win98 interface, the middle stretch to content — five eras, the upgrade tree, skills, languages, locations, projects, random events — and the final weeks almost entirely to balancing, polish, and App Store preparation. The classic trap of a solo project is an endless middle; a hard two-month deadline and an AI assistant that kills boilerplate time are what kept the middle short.</p>
 
   <figure class="post-img phone">
-    <img src={`${base}assets/promo-screens/wincode-98/2.png`} alt="WinCode 98 five eras of programming — Machine Code, Procedural, OOP, Internet, Cloud & AI" />
+    <img src={`${base}assets/promo-screens/wincode-98/5.png`} alt="WinCode 98 random choice event — a system notification with three reward options" />
   </figure>
 
   <h2>Should You Build a Game with AI?</h2>
@@ -127,3 +290,66 @@ const jsonLd = JSON.stringify({
     <a class="back" href={`${base}#journal`}>← All posts</a>
   </Fragment>
 </PostLayout>
+
+<style>
+  .chart-fig svg { width: 92%; display: block; margin: 20px 0 8px; }
+  .chart-fig .grid { stroke: rgba(255, 255, 255, 0.07); }
+  .chart-fig .axis { stroke: var(--line-2); }
+  .chart-fig .tick, .chart-fig .end-val, .chart-fig .readout { font: 12px var(--mono); fill: var(--muted); }
+  .chart-fig .axis-label { font: 13px var(--sans); fill: var(--muted); transition: opacity 0.15s; }
+  .chart-fig .end-name, .chart-fig .legend text { font: 13px var(--sans); fill: var(--ink); }
+  .chart-fig .line-curve { stroke: var(--green); stroke-width: 2; fill: none; }
+  .chart-fig .line-exp { stroke: #c98500; stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+  .chart-fig .dot-curve { fill: var(--green); stroke: var(--bg-2); stroke-width: 2; }
+  .chart-fig .dot-exp { fill: #c98500; stroke: var(--bg-2); stroke-width: 2; }
+  .chart-fig .cross-line { stroke: rgba(255, 255, 255, 0.25); stroke-dasharray: 3 3; }
+  .chart-fig .readout { fill: var(--ink); }
+</style>
+
+<script>
+  const L12 = Math.log10(1.12), L5 = Math.log10(1.0005);
+  const lg45 = Math.log10(45);
+  const xpAt = (l: number) => 60 * l * l * 1.0001 ** (l * l);
+  const mult = (v: number) => '×' + (v >= 100 ? Math.round(v).toLocaleString('en-US') : v.toFixed(1));
+  const charts: Record<string, (fx: number) => { fx: number; ys: number[]; text: string }> = {
+    'price-curve': (fx) => {
+      const n = Math.round(fx * 50);
+      const c = n * L12 + n * n * L5, e = n * L12;
+      return { fx: n / 50, ys: [c / 3.2, e / 3.2], text: `level ${n} — ${mult(10 ** c)} vs ${mult(10 ** e)} pure` };
+    },
+    'shop-curve': (fx) => {
+      const t = Math.round(fx * 40) / 10, income = 10 ** t, fixed = 45 / income;
+      const clicks = fixed >= 1 ? String(+fixed.toFixed(1)) : fixed.toFixed(fixed >= 0.01 ? 2 : 4);
+      const money = income >= 1000 ? '$' + +(income / 1000).toFixed(1) + 'K' : '$' + +income.toFixed(1);
+      return { fx: t / 4, ys: [(lg45 + 3) / 5, (lg45 - t + 3) / 5], text: `at ${money} per click — 45 vs ${clicks} clicks` };
+    },
+    'xp-curve': (fx) => {
+      const l = 1 + Math.round(fx * 19);
+      return { fx: (l - 1) / 19, ys: [xpAt(l) / 25000], text: `level ${l} → ${Math.round(xpAt(l)).toLocaleString('en-US')} XP to next` };
+    },
+  };
+  for (const [id, at] of Object.entries(charts)) {
+    const fig = document.getElementById(id);
+    const svg = fig?.querySelector('svg');
+    const cross = fig?.querySelector<SVGGElement>('.cross');
+    const readout = fig?.querySelector('.readout');
+    const axisLabel = fig?.querySelector<SVGTextElement>('.axis-label');
+    if (!svg || !cross || !readout) continue;
+    const [line, ...dots] = Array.from(cross.children);
+    svg.addEventListener('pointermove', (e) => {
+      const r = svg.getBoundingClientRect();
+      const p = at(Math.max(0, Math.min(1, (((e.clientX - r.left) / r.width) * 720 - 52) / 536)));
+      const x = String(52 + p.fx * 536);
+      line.setAttribute('x1', x); line.setAttribute('x2', x);
+      p.ys.forEach((yf, i) => { dots[i].setAttribute('cx', x); dots[i].setAttribute('cy', String(360 - yf * 340)); });
+      cross.style.opacity = '1';
+      if (axisLabel) axisLabel.style.opacity = '0';
+      readout.textContent = p.text;
+    });
+    svg.addEventListener('pointerleave', () => {
+      cross.style.opacity = '0';
+      if (axisLabel) axisLabel.style.opacity = '1';
+      readout.textContent = '';
+    });
+  }
+</script>
