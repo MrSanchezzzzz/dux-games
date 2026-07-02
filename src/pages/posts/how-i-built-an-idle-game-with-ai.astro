@@ -1,0 +1,129 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+
+const title = 'How I Built an iOS Idle Game in 2 Months, Solo, with Claude Code — DUX Games';
+const description = 'A solo dev postmortem: how I designed, balanced, and shipped WinCode 98 — a retro Win98-style idle programmer game for iOS — in two months by vibe coding with Claude Code.';
+const canonical = 'https://mrsanchezzzzz.github.io/dux-games/posts/how-i-built-an-idle-game-with-ai/';
+const ogImage = 'https://mrsanchezzzzz.github.io/dux-games/assets/posts/wincode-98/built-with-ai-cover.webp';
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How I Built an iOS Idle Game in 2 Months, Solo, with Claude Code",
+  "description": "A solo dev postmortem: how I designed, balanced, and shipped WinCode 98 — a retro Win98-style idle programmer game for iOS — in two months by vibe coding with Claude Code.",
+  "image": "https://mrsanchezzzzz.github.io/dux-games/assets/posts/wincode-98/built-with-ai-cover.webp",
+  "datePublished": "2026-07-02",
+  "author": { "@type": "Organization", "name": "DUX Games", "url": "https://mrsanchezzzzz.github.io/dux-games/" },
+  "publisher": { "@type": "Organization", "name": "DUX Games", "url": "https://mrsanchezzzzz.github.io/dux-games/" },
+  "url": "https://mrsanchezzzzz.github.io/dux-games/posts/how-i-built-an-idle-game-with-ai/"
+});
+---
+<PostLayout
+  {title}
+  {description}
+  {canonical}
+  {ogImage}
+  publishedTime="2026-07-02"
+  tags={["WinCode 98", "Claude Code", "vibe coding", "solo dev", "idle game"]}
+  category="Devlog"
+  date="July 2, 2026"
+  {jsonLd}
+>
+  <Fragment slot="hero">
+    <a class="back" href={`${base}#journal`}><span class="back-arrow">←</span> Journal</a>
+    <div class="post-meta">
+      <span class="cat">Devlog</span>
+      <span class="date">July 2, 2026</span>
+    </div>
+    <h1>How I Built an iOS Idle Game in 2 Months, Solo, with Claude Code</h1>
+    <p class="lede">The full postmortem of WinCode 98: designing the mechanics, balancing an economy where everything stacks multiplicatively, and how Claude Code turned a side project into a shipped App Store game.</p>
+  </Fragment>
+
+  <p>Two months ago, <strong>WinCode 98</strong> was a note on my phone. Today it's a finished idle game on the iOS App Store — five historical eras of programming, 300+ upgrades, 25 skills, 13 languages, projects, random events, and a full Windows 98-style interface. I built it alone, in the evenings, next to a full-time job.</p>
+
+  <p>The honest answer to "how" has two parts: three years of professional mobile development experience, and Claude Code doing the heavy lifting. One thing up front, though: the idea and the concept of the game are entirely mine. AI didn't design WinCode 98 — it was a tool for writing code, the way an IDE or a framework is a tool, just a dramatically faster one. This post is the breakdown of both — what I designed myself, what I delegated to AI, where it was brilliant, and where it confidently wasted my time.</p>
+
+  <figure class="post-img">
+    <img src={`${base}assets/posts/wincode-98/built-with-ai-cover.webp`} alt="Game in 2 months — a modern laptop streaming code into a retro Windows 98 CRT monitor" />
+  </figure>
+
+  <h2>Why a Programming Idle Game?</h2>
+
+  <p>I'm a programmer by education and a mobile developer by trade, so the theme picked itself: a clicker where you live through the history of programming, from 1940s punch cards to the modern AI &amp; Cloud era. When I searched the App Store, I found farming clickers, mining clickers, restaurant clickers — but no good idle game <em>about programming itself</em>. That gap was the green light.</p>
+
+  <p>An idle game was also the right scope for a first solo release. The genre lives or dies on numbers and pacing, not on animation-heavy content — which means one person with taste and a calculator can realistically compete.</p>
+
+  <h2>The Core Loop: Click, Upgrade, Advance an Era</h2>
+
+  <p>Every click writes code and earns money and XP — and costs 1 energy, which regenerates passively. Money goes into upgrades, skills, languages, and workspace locations; XP levels you up and unlocks new content; and completing an era grants a <em>permanent</em> bonus that compounds into everything after it — Era 1 gives +25% click income forever, Era 5 gives +25% to all income. It works like a prestige system, except you never reset: history only moves forward.</p>
+
+  <figure class="post-img phone">
+    <img src={`${base}assets/promo-screens/wincode-98/1.png`} alt="WinCode 98 main screen — tap to write code, with XP, energy, and money bars in a Windows 98 interface" />
+  </figure>
+
+  <p>On top of the loop sit projects and events. Projects are click-driven jobs with a twist every programmer will recognize: each click has a small bug chance (4–10%), and a spawned bug penalizes your income until you fix it. Random events fire on roughly one in five clicks — a client tip, a challenge, a timed buff. And every click can crit: 12% chance of ×2, 2% chance of ×10.</p>
+
+  <div class="post-img-pair">
+    <figure class="post-img phone">
+      <img src={`${base}assets/promo-screens/wincode-98/3.png`} alt="WinCode 98 projects screen — click-driven jobs with rewards and first-clear bonuses" />
+    </figure>
+    <figure class="post-img phone">
+      <img src={`${base}assets/promo-screens/wincode-98/5.png`} alt="WinCode 98 random choice event — a system notification with three reward options" />
+    </figure>
+  </div>
+
+  <p>Every mechanic had to answer one question: does it make the next tap, or the next return to the game, more interesting? If not, it got cut. Two months is not a lot of time, and the fastest feature to build is the one you don't.</p>
+
+  <h2>Balancing an Economy Where Everything Multiplies</h2>
+
+  <p>Balancing is where idle games are secretly hard. In WinCode 98, upgrades, skills, languages, locations, era bonuses, and timed boosts all stack <em>multiplicatively</em> — which is great for that snowball feeling and terrifying for the person tuning the numbers. A few design decisions kept it under control:</p>
+
+  <ul class="era-list cols">
+    <li><strong>The shop prices itself in clicks, not money.</strong> <span>Every consumable scales with income: <code>price = base × income&nbsp;per&nbsp;click</code>. Coffee is always 45 clicks at $2 or $2M per tap — never trivially cheap, never out of reach.</span></li>
+    <li><strong>Energy items must cost more than they return.</strong> <span>Coffee costs 45 clicks and restores 30. Reversed, buy&nbsp;→&nbsp;click&nbsp;→&nbsp;rebuy would be a free-money loop.</span></li>
+    <li><strong>Inactive things stay 10% alive.</strong> <span>One language and one location are active at a time, but everything mastered keeps 10% of its bonus. Switching is a decision, not a punishment.</span></li>
+    <li><strong>The endgame brakes itself.</strong> <span>Two infinite upgrades: price grows 12% per level, the bonus only 5% — a soft brake that keeps money meaningful after max level.</span></li>
+  </ul>
+
+  <figure class="post-img phone">
+    <img src={`${base}assets/promo-screens/wincode-98/4.png`} alt="WinCode 98 languages screen — owned languages keep a residual bonus while inactive, part of 300+ upgrades" />
+  </figure>
+
+  <p>This, by the way, is the part AI helped with least. Claude Code can generate a plausible-looking cost formula in seconds, but it has no idea whether minute 40 of <em>your</em> game feels boring. The rules above came from playing my own build every evening and moving numbers by hand.</p>
+
+  <h2>Vibe Coding a Game with Claude Code: My Actual Workflow</h2>
+
+  <p>The workflow that emerged after the first couple of weeks looked like this:</p>
+
+  <ul class="era-list cols">
+    <li><strong>I owned the design.</strong> <span>Every mechanic, formula, and screen started as my written spec — Claude Code never decided what the game <em>is</em>. Features went from my design document into prompts.</span></li>
+    <li><strong>Claude Code wrote the first draft of almost everything.</strong> <span>UI layout, the save system, the upgrade data model, the event scheduler, offline income — I described the behavior, it produced working code far faster than I could type it.</span></li>
+    <li><strong>ChatGPT drew the pixel art.</strong> <span>The era icons, item art, and event illustrations are AI-generated too. Claude Code handled the code, ChatGPT handled the pixels — a two-AI production with one human directing both.</span></li>
+    <li><strong>I reviewed like it was a junior's pull request.</strong> <span>This is where the 3+ years of mobile development mattered. AI code compiles and usually works — but it duplicates state, misses lifecycle edge cases, and over-engineers simple things.</span></li>
+    <li><strong>Iterations were brutally short.</strong> <span>Describe, generate, run on device, correct. A feature that used to be a weekend became an evening.</span></li>
+  </ul>
+
+  <p>Call it vibe coding if you like — most of the code was AI-written, and I steered by describing behavior, not syntax. But it was vibe coding <em>with a code review</em>: nothing shipped that a human hadn't read. That one habit is, I suspect, the difference between the vibe-coded games that work and the ones that fall apart at the first edge case.</p>
+
+  <p>The honest summary: Claude Code didn't make the game. It removed the cost of typing, boilerplate, and looking things up — which for a solo evening project is the difference between shipping in two months and abandoning it in six.</p>
+
+  <p>And the toolchain keeps moving. Anthropic's new <strong>Fable</strong> model landed just as I was working on monetization, and the newest feature in the game — optional rewarded ads that double a reward bonus, the only monetization WinCode 98 has — was my first feature built with it. Same describe–generate–review loop; the workflow survived the model swap unchanged.</p>
+
+  <h2>What Two Months Actually Looked Like</h2>
+
+  <p>Roughly: the first weeks went to the core loop and the Win98 interface, the middle stretch to content — five eras, the upgrade tree, skills, languages, locations, projects, random events — and the final weeks almost entirely to balancing, polish, and App Store preparation. The classic trap of a solo project is an endless middle; a hard two-month deadline and an AI assistant that kills boilerplate time are what kept the middle short.</p>
+
+  <figure class="post-img phone">
+    <img src={`${base}assets/promo-screens/wincode-98/2.png`} alt="WinCode 98 five eras of programming — Machine Code, Procedural, OOP, Internet, Cloud & AI" />
+  </figure>
+
+  <h2>Should You Build a Game with AI?</h2>
+
+  <p>If you can already read code — yes, without hesitation. AI multiplies an engineer; it doesn't substitute for one. The idea, the design document, the balancing, and the code review stayed 100% human. Everything else got dramatically faster.</p>
+
+  <p><strong>WinCode 98</strong> is free on iOS — no banners, no interstitials, only optional rewarded ads you choose to watch. If you're a programmer, or you just miss grey windows and pixel buttons, go walk the path from machine code to the AI&nbsp;&amp;&nbsp;Cloud era. And if you're a developer thinking about your own game: the barrier has never been lower. Two months. Evenings. One person.</p>
+
+  <Fragment slot="footer-nav">
+    <a class="back" href={`${base}#journal`}>← All posts</a>
+  </Fragment>
+</PostLayout>
