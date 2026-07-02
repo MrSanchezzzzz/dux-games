@@ -13,6 +13,8 @@ const jsonLd = JSON.stringify({
   "description": "A free nostalgic clicker sim about the journey from machine code to the modern AI & Cloud era, built in the style of old-school computer interfaces.",
   "image": "https://mrsanchezzzzz.github.io/dux-games/assets/posts/wincode-98/cover.webp",
   "datePublished": "2026-06-20",
+  "dateModified": "2026-07-02",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://mrsanchezzzzz.github.io/dux-games/posts/wincode-98-nostalgia/" },
   "author": { "@type": "Organization", "name": "DUX Games", "url": "https://mrsanchezzzzz.github.io/dux-games/" },
   "publisher": { "@type": "Organization", "name": "DUX Games", "url": "https://mrsanchezzzzz.github.io/dux-games/" },
   "url": "https://mrsanchezzzzz.github.io/dux-games/posts/wincode-98-nostalgia/"
@@ -44,7 +46,7 @@ const jsonLd = JSON.stringify({
   <p>It's a game for people who love code, retro aesthetics, idle/clicker games, and that feeling of slow, satisfying progress. We didn't want to make just another clicker — we wanted to capture the atmosphere of the 90s: grey windows, pixel buttons, plain menus, system alerts, and that exact mood of an old computer.</p>
 
   <figure class="post-img">
-    <img src={`${base}assets/posts/wincode-98/cover.webp`} alt="WinCode 98 main screen" />
+    <img src={`${base}assets/posts/wincode-98/cover.webp`} width="1200" height="675" fetchpriority="high" decoding="async" alt="WinCode 98 main screen" />
   </figure>
 
   <p>In WinCode 98, the player follows a programmer's journey from the very beginning all the way to the modern AI&nbsp;&amp;&nbsp;Cloud era. The core mechanic clicks into place within seconds: tap to write code, earn money from projects, buy upgrades, and level up your programmer across 5 technology eras.</p>
@@ -52,7 +54,7 @@ const jsonLd = JSON.stringify({
   <p>But progress in the game isn't just bigger numbers. Each new era feels like the next step in the history of programming.</p>
 
   <figure class="post-img phone">
-    <img src={`${base}assets/posts/wincode-98/write-code.webp`} alt="WinCode 98 main gameplay screen" />
+    <img src={`${base}assets/posts/wincode-98/write-code.webp`} width="660" height="1431" loading="lazy" decoding="async" alt="WinCode 98 main gameplay screen" />
   </figure>
 
   <h2>5 Eras of Programming History</h2>
@@ -66,7 +68,7 @@ const jsonLd = JSON.stringify({
   </ul>
 
   <figure class="post-img phone">
-    <img src={`${base}assets/posts/wincode-98/travel-tech-eras.webp`} alt="WinCode 98 first and last era collage" />
+    <img src={`${base}assets/posts/wincode-98/travel-tech-eras.webp`} width="660" height="1431" loading="lazy" decoding="async" alt="WinCode 98 first and last era collage" />
   </figure>
 
   <h2>Upgrades, Projects, and Random Events</h2>
@@ -79,10 +81,10 @@ const jsonLd = JSON.stringify({
 
   <div class="post-img-pair">
     <figure class="post-img phone">
-      <img src={`${base}assets/posts/wincode-98/unlock-&-boost.webp`} alt="WinCode 98 upgrades screen" />
+      <img src={`${base}assets/posts/wincode-98/unlock-&-boost.webp`} width="660" height="1431" loading="lazy" decoding="async" alt="WinCode 98 upgrades screen" />
     </figure>
     <figure class="post-img phone">
-      <img src={`${base}assets/posts/wincode-98/solve-challenges.webp`} alt="WinCode 98 random event screen" />
+      <img src={`${base}assets/posts/wincode-98/solve-challenges.webp`} width="660" height="1431" loading="lazy" decoding="async" alt="WinCode 98 random event screen" />
     </figure>
   </div>
 
@@ -93,10 +95,12 @@ const jsonLd = JSON.stringify({
   <p>WinCode 98 is free to play. We want as many players as possible to try it, walk the path from Machine Era to AI&nbsp;&amp;&nbsp;Cloud, and soak in the nostalgic atmosphere of an old computer.</p>
 
   <figure class="post-img phone">
-    <img src={`${base}assets/posts/wincode-98/promo.webp`} alt="WinCode 98 — Free on release, Coming soon on App Store" />
+    <img src={`${base}assets/posts/wincode-98/promo.webp`} width="660" height="1431" loading="lazy" decoding="async" alt="WinCode 98 — Free on release, Coming soon on App Store" />
   </figure>
 
   <p>WinCode 98 is worth trying if you're a programmer, or anyone who loves clicker games, retro computers, and the story of how technology evolved.</p>
+
+  <p>Curious how the game was actually made? Read the full postmortem: <a href={`${base}posts/how-i-built-an-idle-game-with-ai/`}>How I Built an iOS Idle Game in 2 Months, Solo, with Claude Code</a>.</p>
 
   <Fragment slot="footer-nav">
     <a class="back" href={`${base}#journal`}>← All posts</a>

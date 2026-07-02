@@ -13,6 +13,8 @@ const jsonLd = JSON.stringify({
   "description": "A solo dev postmortem: how I designed, balanced, and shipped WinCode 98 — a retro Win98-style idle programmer game for iOS — in two months by vibe coding with Claude Code.",
   "image": "https://mrsanchezzzzz.github.io/dux-games/assets/posts/wincode-98/built-with-ai-cover.webp",
   "datePublished": "2026-07-02",
+  "dateModified": "2026-07-02",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://mrsanchezzzzz.github.io/dux-games/posts/how-i-built-an-idle-game-with-ai/" },
   "author": { "@type": "Organization", "name": "DUX Games", "url": "https://mrsanchezzzzz.github.io/dux-games/" },
   "publisher": { "@type": "Organization", "name": "DUX Games", "url": "https://mrsanchezzzzz.github.io/dux-games/" },
   "url": "https://mrsanchezzzzz.github.io/dux-games/posts/how-i-built-an-idle-game-with-ai/"
@@ -43,6 +45,10 @@ const xx = (l) => +(52 + ((l - 1) / 19) * 536).toFixed(1);
 const xy = (xp) => +(360 - (xp / 25000) * 340).toFixed(1);
 const xpAt = (l) => 60 * l * l * 1.0001 ** (l * l);
 const xpPts = Array.from({ length: 39 }, (_, i) => { const l = 1 + i * 0.5; return `${xx(l)},${xy(xpAt(l))}`; }).join(' ');
+// Rejected alternative: exponential pacing anchored to the same level-20 cap.
+const xpR = (xpAt(20) / 60) ** (1 / 19);
+const xpExpAt = (l) => 60 * xpR ** (l - 1);
+const xpExpPts = Array.from({ length: 39 }, (_, i) => { const l = 1 + i * 0.5; return `${xx(l)},${xy(xpExpAt(l))}`; }).join(' ');
 const xpGridY = [0, 5000, 10000, 15000, 20000, 25000].map((v) => ({ y: xy(v), label: v ? v / 1000 + 'K' : '0' }));
 const xpTickX = [1, 5, 10, 15, 20].map((l) => ({ x: xx(l), label: l }));
 const xpEndY = xy(xpAt(20));
@@ -68,12 +74,12 @@ const xpEndY = xy(xpAt(20));
     <p class="lede">The full postmortem of WinCode 98: the three problems that almost broke the game, the pricing curves that hold its economy together, and how Claude Code turned a side project into a shipped App Store game.</p>
   </Fragment>
 
-  <p>Two months ago, <strong>WinCode 98</strong> was a note on my phone. Today it's a finished idle game on the iOS App Store — five historical eras of programming, 300+ upgrades, 25 skills, 13 languages, projects, random events, and a full Windows 98-style interface. I built it alone, in the evenings, next to a full-time job.</p>
+  <p>Two months ago, <strong>WinCode 98</strong> was a note on my phone. Today it's a finished idle game on the iOS App Store — five historical eras of programming, 300+ upgrades, 25 skills, 13 languages, projects, random events, and a full <a href={`${base}posts/wincode-98-nostalgia/`}>Windows 98-style interface</a>. I built it alone, in the evenings, next to a full-time job.</p>
 
   <p>The honest answer to "how" has two parts: three years of professional mobile development experience, and Claude Code doing the heavy lifting. One thing up front, though: the idea and the concept of the game are entirely mine. AI didn't design WinCode 98 — it was a tool for writing code, the way an IDE or a framework is a tool, just a dramatically faster one. This post is the breakdown of both — what I designed myself, what I delegated to AI, where it was brilliant, and where it confidently wasted my time.</p>
 
   <figure class="post-img">
-    <img src={`${base}assets/posts/wincode-98/built-with-ai-cover.webp`} alt="Game in 2 months — a modern laptop streaming code into a retro Windows 98 CRT monitor" />
+    <img src={`${base}assets/posts/wincode-98/built-with-ai-cover.webp`} width="1672" height="941" fetchpriority="high" decoding="async" alt="Game in 2 months — a modern laptop streaming code into a retro Windows 98 CRT monitor" />
   </figure>
 
   <h2>Why a Programming Idle Game?</h2>
@@ -83,7 +89,7 @@ const xpEndY = xy(xpAt(20));
   <p>An idle game was also the right scope for a first solo release. The genre lives or dies on numbers and pacing, not on animation-heavy content — which means one person with taste and a calculator can realistically compete. The concept fits in one sentence: you tap to write code, code earns money and XP, and both feed a growing web of upgrades, skills, languages, and workspaces.</p>
 
   <figure class="post-img phone">
-    <img src={`${base}assets/promo-screens/wincode-98/1.png`} alt="WinCode 98 main screen — tap to write code, with XP, energy, and money bars in a Windows 98 interface" />
+    <img src={`${base}assets/promo-screens/wincode-98/1.webp`} width="660" height="1434" loading="lazy" decoding="async" alt="WinCode 98 main screen — tap to write code, with XP, energy, and money bars in a Windows 98 interface" />
   </figure>
 
   <h2>Three Problems That Almost Broke the Game</h2>
@@ -97,7 +103,7 @@ const xpEndY = xy(xpAt(20));
   <p>The fix was not just cutting rewards. Repeat completions of a project now sit on their own curve: each repeat pays more but also gets harder, with reward outpacing difficulty roughly 2:1 — grinding a favorite project stays profitable, but with diminishing returns per click. And upgrade prices got a curve that is mathematically guaranteed to outrun income growth (more on that below). The lesson: in an idle game, inflation is not a bug you patch once — it's a force you design against everywhere.</p>
 
   <figure class="post-img phone">
-    <img src={`${base}assets/promo-screens/wincode-98/3.png`} alt="WinCode 98 projects screen — click-driven jobs with rewards and first-clear bonuses" />
+    <img src={`${base}assets/promo-screens/wincode-98/3.webp`} width="660" height="1434" loading="lazy" decoding="async" alt="WinCode 98 projects screen — click-driven jobs with rewards and first-clear bonuses" />
   </figure>
 
   <h3>Problem 2: The Phone Ran Hot</h3>
@@ -113,7 +119,7 @@ const xpEndY = xy(xpAt(20));
   <p>The answer became the backbone of the whole game: five technological eras — Machine Code, Procedural, OOP, Internet, and Cloud &amp; AI — that the player advances through over the entire playthrough. Each era has its own unique upgrades and projects, so entering a new one genuinely changes what you're doing, and finishing an era grants a permanent compounding bonus that carries into everything after it. The eras gave the game a destination: the player always knows where they are in the history of programming, and what comes next.</p>
 
   <figure class="post-img phone">
-    <img src={`${base}assets/promo-screens/wincode-98/2.png`} alt="WinCode 98 five eras of programming — Machine Code, Procedural, OOP, Internet, Cloud & AI" />
+    <img src={`${base}assets/promo-screens/wincode-98/2.webp`} width="660" height="1434" loading="lazy" decoding="async" alt="WinCode 98 five eras of programming — Machine Code, Procedural, OOP, Internet, Cloud & AI" />
   </figure>
 
   <h2>Balancing an Economy Where Everything Multiplies</h2>
@@ -204,12 +210,12 @@ const xpEndY = xy(xpAt(20));
     <figcaption>Idle game shop balancing: cost in clicks of effort vs income per click, log-log — hover to compare</figcaption>
   </figure>
 
-  <p><strong>3. XP requirements: quadratic, deliberately gentler.</strong> Leveling follows <code>XP(level) = 60 × level²</code> with a tiny accelerator that only bites near the level cap. Wealth explodes exponentially, but levels must stay achievable — pace progression on the same curve as prices and the player stalls; pace it quadratically and every session still ends with visible progress.</p>
+  <p><strong>3. XP requirements: quadratic, deliberately gentler.</strong> Leveling follows <code>XP(level) = 60 × level²</code> with a tiny accelerator that only bites near the level cap. Wealth explodes exponentially, but levels must stay achievable — pace progression on the same curve as prices and the player stalls; pace it quadratically and every session still ends with visible progress. The chart below shows the exponential alternative I rejected, tuned to reach the same level-20 cap: the total grind is identical, but the exponential curve hides almost all of it in the last few levels — early levels fly by, then the player hits a wall.</p>
 
   <figure class="post-img chart-fig" id="xp-curve">
     <svg viewBox="0 0 720 430" role="img" aria-labelledby="xc-title xc-desc">
-      <title id="xc-title">Idle game level pacing: quadratic XP requirement curve from level 1 to 20</title>
-      <desc id="xc-desc">Line chart of the XP required to reach the next level in the incremental game WinCode 98, following 60 times level squared with a tiny 1.0001 to the power level squared accelerator. It grows from 60 XP at level 1 to about 22,500 XP at level 19 — a quadratic curve, deliberately far gentler than the exponential upgrade prices, so leveling stays achievable while wealth explodes. The accelerator only adds a final-stretch slowdown near the level 20 cap.</desc>
+      <title id="xc-title">Idle game level pacing: quadratic XP curve vs an exponential alternative with the same cap</title>
+      <desc id="xc-desc">Line chart comparing two level-pacing curves for the incremental game WinCode 98, both reaching about 25,000 XP at the level 20 cap. The shipped quadratic curve, 60 times level squared, rises evenly from 60 XP at level 1 — every session shows visible progress. The rejected exponential alternative stays near zero until about level 13 and then spikes: at level 10 it asks about 1,000 XP where the quadratic asks 6,000, hiding almost the whole grind in the final few levels. Quadratic pacing was chosen so leveling stays achievable while wealth grows exponentially.</desc>
       {xpGridY.map((g) => (
         <Fragment>
           <line x1="52" y1={g.y} x2="588" y2={g.y} class="grid" />
@@ -221,18 +227,26 @@ const xpEndY = xy(xpAt(20));
       ))}
       <line x1="52" y1="360" x2="588" y2="360" class="axis" />
       <text x="320" y="412" text-anchor="middle" class="axis-label">player level</text>
+      <polyline points={xpExpPts} class="line-exp" />
       <polyline points={xpPts} class="line-curve" />
       <g class="cross" style="opacity:0">
         <line x1="52" y1="20" x2="52" y2="360" class="cross-line" />
         <circle r="4" class="dot-curve" />
+        <circle r="4" class="dot-exp" />
       </g>
       <circle cx="588" cy={xpEndY} r="4" class="dot-curve" />
       <text x="598" y={xpEndY + 4} class="end-name">level cap</text>
       <text x="598" y={xpEndY + 20} class="end-val">≈25,000 XP</text>
+      <g class="legend">
+        <line x1="52" y1="8" x2="70" y2="8" class="line-curve" />
+        <text x="76" y="12">quadratic 60 × level² (shipped)</text>
+        <line x1="300" y1="8" x2="318" y2="8" class="line-exp" />
+        <text x="324" y="12">exponential, same cap (rejected)</text>
+      </g>
       <text x="588" y="412" text-anchor="end" class="readout"></text>
       <rect x="52" y="20" width="536" height="340" fill="transparent" />
     </svg>
-    <figcaption>Idle game level pacing: XP required for the next level, 60 XP at level 1 to ≈22,500 at level 19 — hover to inspect</figcaption>
+    <figcaption>Idle game level pacing: quadratic XP curve vs an exponential alternative reaching the same cap — hover to compare</figcaption>
   </figure>
 
   <p>Two more rules keep the multiplication under control:</p>
@@ -243,7 +257,7 @@ const xpEndY = xy(xpAt(20));
   </ul>
 
   <figure class="post-img phone">
-    <img src={`${base}assets/promo-screens/wincode-98/4.png`} alt="WinCode 98 languages screen — owned languages keep a residual bonus while inactive, part of 300+ upgrades" />
+    <img src={`${base}assets/promo-screens/wincode-98/4.webp`} width="660" height="1434" loading="lazy" decoding="async" alt="WinCode 98 languages screen — owned languages keep a residual bonus while inactive, part of 300+ upgrades" />
   </figure>
 
   <p>This, by the way, is the part AI helped with least. Claude Code can generate a plausible-looking cost formula in seconds, but it has no idea whether minute 40 of your game feels boring. The curves above came from playing my own build every evening and moving numbers by hand.</p>
@@ -277,7 +291,7 @@ const xpEndY = xy(xpAt(20));
   <p>Roughly: the first weeks went to the core loop and the Win98 interface, the middle stretch to content — five eras, the upgrade tree, skills, languages, locations, projects, random events — and the final weeks almost entirely to balancing, polish, and App Store preparation. The classic trap of a solo project is an endless middle; a hard two-month deadline and an AI assistant that kills boilerplate time are what kept the middle short.</p>
 
   <figure class="post-img phone">
-    <img src={`${base}assets/promo-screens/wincode-98/5.png`} alt="WinCode 98 random choice event — a system notification with three reward options" />
+    <img src={`${base}assets/promo-screens/wincode-98/5.webp`} width="660" height="1434" loading="lazy" decoding="async" alt="WinCode 98 random choice event — a system notification with three reward options" />
   </figure>
 
   <h2>Should You Build a Game with AI?</h2>
@@ -325,7 +339,8 @@ const xpEndY = xy(xpAt(20));
     },
     'xp-curve': (fx) => {
       const l = 1 + Math.round(fx * 19);
-      return { fx: (l - 1) / 19, ys: [xpAt(l) / 25000], text: `level ${l} → ${Math.round(xpAt(l)).toLocaleString('en-US')} XP to next` };
+      const exp = 60 * ((xpAt(20) / 60) ** (1 / 19)) ** (l - 1);
+      return { fx: (l - 1) / 19, ys: [xpAt(l) / 25000, exp / 25000], text: `level ${l} — ${Math.round(xpAt(l)).toLocaleString('en-US')} vs ${Math.round(exp).toLocaleString('en-US')} XP` };
     },
   };
   for (const [id, at] of Object.entries(charts)) {
