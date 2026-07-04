@@ -242,7 +242,7 @@
     margin: 0 auto;
     padding: 28px 24px 60px;
   }
-  .stack > * + *{ margin-top: 22px; }
+  .stack > * + *{ margin-top: 34px; }
 
   /* Section title bar (small caption window above each section) */
   .sect-cap{
@@ -339,18 +339,21 @@
   }
   .card-p{ font-size: 14px; margin: 0; }
 
-  /* "Loop" step cards */
-  .step{
-    padding: 16px;
+  /* "How it plays" wizard row: 1 ► 2 ► 3 */
+  .loop-row{ display: flex; align-items: stretch; gap: 12px; }
+  .loop-step{
+    flex: 1;
+    padding: 28px 14px;
+    text-align: center;
   }
-  .step .num{
+  .loop-step .num{
     display: inline-block;
     background: var(--navy); color: var(--white);
-    width: 28px; height: 28px; line-height: 28px; text-align: center;
-    font-weight: 700; margin-bottom: 10px;
+    width: 36px; height: 36px; line-height: 36px; text-align: center;
+    font-weight: 700; font-size: 18px;
   }
-  .step h3{ margin: 0 0 6px; font-size: 20px; }
-  .step p{ margin: 0; font-size: 15px; }
+  .loop-step h3{ margin: 12px 0 0; font-size: 22px; }
+  .loop-arrow{ align-self: center; flex: 0 0 auto; color: var(--navy); font-size: 30px; }
 
   /* Inside-the-game tabs (visual only) */
   .tabbar{ display: flex; gap: 0; padding: 0 6px; margin-bottom: -2px; position: relative; z-index: 1;}
@@ -445,28 +448,28 @@
   .code .c-key{ color: #ffd400; }
   .code .c-str{ color: #61dafb; }
 
-  /* ---------- Random events strip ---------- */
-  .event{
-    padding: 10px 12px;
-    display: grid;
-    grid-template-columns: 36px 1fr;
-    gap: 12px;
-    align-items: start;
-    font-size: 14px;
+  /* ---------- "Why" cards: desktop-icon style ---------- */
+  .why-grid{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .why{
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    padding: 30px 12px 26px;
+    text-align: center;
   }
-  .event .e-ico{
-    width: 32px; height: 32px;
+  .why .w-ico{
+    width: 60px; height: 60px;
     display: grid; place-items: center;
-    font-weight: 900; color: var(--white);
-    font-family: 'IBM VGA', monospace;
-    font-size: 22px;
+    border: 2px solid;
+    border-color: var(--white) var(--shadow-2) var(--shadow-2) var(--white);
   }
-  .event .e-ico.bug{ background: var(--alert); }
-  .event .e-ico.tip{ background: var(--olive); }
-  .event .e-ico.ask{ background: var(--navy); }
-  .event .e-ico.brk{ background: var(--maroon); }
-  .event h4{ margin: 0 0 2px; font-size: 15px; }
-  .event p{ margin: 0; font-size: 13px; color: var(--shadow-2); }
+  .why .w-ico i{ display: block; width: 26px; height: 26px; background: var(--white); }
+  .why .w-ico i.shp-circle{ border-radius: 50%; }
+  .why .w-ico i.shp-triangle{ clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .why .w-ico i.shp-diamond{ width: 22px; height: 22px; transform: rotate(45deg); }
+  .why .w-ico.c-blue{ background: var(--navy-2); }
+  .why .w-ico.c-green{ background: #00a000; }
+  .why .w-ico.c-yellow{ background: var(--warn); }
+  .why .w-ico.c-red{ background: var(--alert); }
+  .why h4{ margin: 0; font-size: 18px; }
 
   /* ---------- Screenshots ---------- */
   .shots{
@@ -717,8 +720,8 @@
   .badge:hover{ transform: translate(-1px,-2px); box-shadow: 2px 3px 0 rgba(0,0,0,.5); }
 
   /* ---- 8. Step cards: hover raise ---- */
-  .step{ transition: transform .2s ease-out, box-shadow .2s ease-out; }
-  .step:hover{ transform: translateY(-3px); box-shadow: 3px 4px 0 rgba(0,0,0,.35); }
+  .loop-step{ transition: transform .2s ease-out, box-shadow .2s ease-out; }
+  .loop-step:hover{ transform: translateY(-3px); box-shadow: 3px 4px 0 rgba(0,0,0,.35); }
 
   /* ---- 9. File rows: hover highlight (selection-blue) ---- */
   .row{ transition: background-color .12s ease-out, color .12s ease-out; cursor: default; }
@@ -756,11 +759,11 @@
     50%    { transform: scale(1.12); }
   }
 
-  /* ---- 12. Event icons: tiny idle wiggle ---- */
-  .event .e-ico{ transition: transform .2s ease-out; }
-  .event:hover .e-ico{ transform: rotate(-6deg) scale(1.1); }
-  .event:hover{ transform: translateY(-2px); }
-  .event{ transition: transform .15s ease-out; }
+  /* ---- 12. Why icons: tiny idle wiggle ---- */
+  .why .w-ico{ transition: transform .2s ease-out; }
+  .why:hover .w-ico{ transform: rotate(-6deg) scale(1.1); }
+  .why:hover{ transform: translateY(-2px); }
+  .why{ transition: transform .15s ease-out; }
 
   /* ---- 13. Section caption tag: slide-in from left when revealed ---- */
   .reveal .sect-cap{
@@ -891,19 +894,16 @@
             Ship bugs.<br/>
             <span class="accent">Get rich</span> idle.
           </h1>
-          <!-- <p class="lede">
-            An idle programmer simulator that runs on nostalgia. Tap to type,
-            stack upgrades, take on clients, squash bugs, and watch your
-            one-person software empire compile itself overnight.
-          </p> -->
+          <p class="lede">
+            Live a programmer's life — from your first line of code
+            to the AI era. One tap at a time.
+          </p>
 
           <ul class="feats">
-            <li>120+ stackable upgrades</li>
-            <li>Real client projects with deadlines</li>
-            <li>Random events: bugs, tips, blackouts</li>
-            <li>Offline earnings while you sleep</li>
-            <li>Authentic 1998 desktop UI</li>
-            <li>No ads. No microtransactions.</li>
+            <li>Authentic 1998 desktop</li>
+            <li>5 eras: from BASIC to AI</li>
+            <li>120+ upgrades to stack</li>
+            <li>Earns while you sleep</li>
           </ul>
 
           <div class="ctas">
@@ -985,21 +985,20 @@
         <div class="winbtns"><div class="winbtn">_</div><div class="winbtn">▢</div><div class="winbtn">✕</div></div>
       </div>
       <div class="winbody">
-        <div class="grid-3 stagger">
-          <div class="raised step">
+        <div class="loop-row stagger">
+          <div class="raised loop-step">
             <span class="num">1</span>
             <h3>Tap to type</h3>
-            <p>Every tap writes a line of code. Faster taps, longer lines, fatter paychecks. The keyboard never sleeps — and neither does the meter.</p>
           </div>
-          <div class="raised step">
+          <div class="loop-arrow">►</div>
+          <div class="raised loop-step">
             <span class="num">2</span>
             <h3>Upgrade everything</h3>
-            <p>Better keyboards. Bigger monitors. Caffeine. Cursed energy drinks. AI co-pilots. 120+ stackable upgrades, each one a satisfying click.</p>
           </div>
-          <div class="raised step">
+          <div class="loop-arrow">►</div>
+          <div class="raised loop-step">
             <span class="num">3</span>
             <h3>Idle &amp; collect</h3>
-            <p>Close the app, sleep, go to your real job. Come back to a fat stack of offline earnings and a queue of clients begging for features.</p>
           </div>
         </div>
 
@@ -1013,114 +1012,30 @@
     </div>
   </section>
 
-  <!-- ============== INSIDE THE GAME ============== -->
+  <!-- ============== WHY PLAY ============== -->
   <section class="reveal">
-    <!-- <div class="sect-cap">▌ Inside the game</div> -->
-
     <div class="win">
       <div class="titlebar">
-        <!-- <span class="ico"><span class="pico pico-folder"></span></span> -->
-        <span class="title">INSIDE THE GAME</span>
+        <span class="title">WHY WINCODE 98 ?</span>
         <div class="winbtns"><div class="winbtn">_</div><div class="winbtn">▢</div><div class="winbtn">✕</div></div>
       </div>
-
-      <div class="tabbar">
-        <div class="tab active">Upgrades</div>
-        <div class="tab">Tasks</div>
-        <div class="tab">Projects</div>
-        <div class="tab">Random Events</div>
-      </div>
-
-      <div class="winbody" style="padding-top:12px;">
-
-        <div class="grid-2" style="grid-template-columns: 1.1fr 0.9fr;">
-          <!-- LEFT col: upgrades file list -->
-          <div>
-            <div class="muted mono" style="margin-bottom:6px;">📁 \UPGRADES — 4 of 120 shown</div>
-            <div class="sunken pad-tight">
-              <div class="row">
-                <div class="ico-tile">⌨</div>
-                <div><b>Mechanical Keyboard MK-II</b><br/><span class="muted">+25% lines per tap · stacks ×10</span></div>
-                <div class="meta-r">$480</div>
-              </div>
-              <div class="row">
-                <div class="ico-tile">☕</div>
-                <div><b>Espresso Machine</b><br/><span class="muted">−20% bug spawn rate</span></div>
-                <div class="meta-r">$2,400</div>
-              </div>
-              <div class="row">
-                <div class="ico-tile">🖥</div>
-                <div><b>Triple Monitor Setup</b><br/><span class="muted">+2 concurrent tasks</span></div>
-                <div class="meta-r">$14,800</div>
-              </div>
-              <div class="row">
-                <div class="ico-tile">🤖</div>
-                <div><b>AI Pair Programmer</b><br/><span class="muted">Auto-types when idle</span></div>
-                <div class="meta-r">$120k</div>
-              </div>
-              <div class="row">
-                <div class="ico-tile">🏢</div>
-                <div><b>Hire a Junior Dev</b><br/><span class="muted">+1 worker, 0.5× your output</span></div>
-                <div class="meta-r">$680k</div>
-              </div>
-              <div class="row">
-                <div class="ico-tile">🌐</div>
-                <div><b>Open-source the Repo</b><br/><span class="muted">+5% global multiplier, forever</span></div>
-                <div class="meta-r">$4.2M</div>
-              </div>
-            </div>
+      <div class="winbody">
+        <div class="why-grid stagger">
+          <div class="raised why">
+            <div class="w-ico c-blue"><i class="shp-square"></i></div>
+            <h4>Pure 1998</h4>
           </div>
-
-          <!-- RIGHT col: tasks + project preview -->
-          <div class="stack" style="--stack:14px;">
-            <div>
-              <div class="muted mono" style="margin-bottom:6px;">📁 \TASKS — daily queue</div>
-              <div class="sunken pad-tight">
-                <div class="row"><div class="ico-tile">▣</div><div>Ship the login page</div><div class="meta-r">+ $1.2k</div></div>
-                <div class="row"><div class="ico-tile">▣</div><div>Refactor the auth flow</div><div class="meta-r">+ $3.4k</div></div>
-                <div class="row"><div class="ico-tile">▢</div><div>Reply to 14 emails</div><div class="meta-r">+ ☕</div></div>
-                <div class="row"><div class="ico-tile">▢</div><div>Write the unit tests<span class="muted"> (lol)</span></div><div class="meta-r">+ XP</div></div>
-              </div>
-            </div>
-
-            <div style="margin-top:14px;">
-              <div class="muted mono" style="margin-bottom:6px;">📁 \PROJECTS — current contract</div>
-              <div class="sunken" style="padding:10px;">
-                <div class="row-flex" style="justify-content:space-between;">
-                  <div><b>Acme Corp · "Internal Dashboard"</b><br/>
-                    <span class="muted" style="font-size:13px;">Deadline 03 days · 4 tasks · 2 bugs</span>
-                  </div>
-                  <div class="meta-r mono">$ 18,400</div>
-                </div>
-                <div class="sunken-thin" style="margin-top:10px; height: 14px; background: var(--gray);">
-                  <div class="progress-fill" style="width:62%; height:100%; background: repeating-linear-gradient(90deg, var(--navy) 0 8px, var(--navy-2) 8px 12px);"></div>
-                </div>
-                <div class="muted mono" style="font-size:13px; margin-top:4px;">62% complete · 3 commits ahead</div>
-              </div>
-            </div>
+          <div class="raised why">
+            <div class="w-ico c-green"><i class="shp-triangle"></i></div>
+            <h4>From BASIC to AI</h4>
           </div>
-        </div>
-
-        <hr style="border:none; border-top:1px solid var(--shadow); border-bottom:1px solid var(--white); margin: 20px 0;" />
-
-        <!-- Random events -->
-        <div class="muted mono" style="margin-bottom:8px;">📁 \EVENTS — happens while you play</div>
-        <div class="grid-4 stagger">
-          <div class="raised event">
-            <div class="e-ico bug">!</div>
-            <div><h4>Critical bug</h4><p>Customer site is down. Fix it fast for a fat bonus — or lose reputation.</p></div>
+          <div class="raised why">
+            <div class="w-ico c-red"><i class="shp-circle"></i></div>
+            <h4>Never boring</h4>
           </div>
-          <div class="raised event">
-            <div class="e-ico tip">$</div>
-            <div><h4>Generous tip</h4><p>A happy client slips you cash. Random size, always welcome.</p></div>
-          </div>
-          <div class="raised event">
-            <div class="e-ico ask">?</div>
-            <div><h4>Scope creep</h4><p>"One small thing…" Accept for reward, decline to keep your sanity.</p></div>
-          </div>
-          <div class="raised event">
-            <div class="e-ico brk">⚡</div>
-            <div><h4>Server down</h4><p>Datacenter on fire. Production halts. Tap fast to reroute traffic.</p></div>
+          <div class="raised why">
+            <div class="w-ico c-yellow"><i class="shp-diamond"></i></div>
+            <h4>Free. No ads.</h4>
           </div>
         </div>
       </div>
@@ -1176,8 +1091,7 @@
         <div class="dl">
           <div>
             <h2>Free.<br/>Just code.</h2>
-            <p>Tap install. Your career as a one-person software empire begins
-            in less than a megabyte. Available now on iPhone.</p>
+            <p>Your software empire fits in your pocket. Available on iPhone.</p>
             <div class="ctas" style="display:flex; gap:10px; flex-wrap:wrap;">
               <a class="badge" href="#">
                 <span class="badge-ico"></span>
