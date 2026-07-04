@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+
+const title = 'Journal — DUX Games';
+const description = 'Devlogs, postmortems, and studio notes from DUX Games — the tiny independent studio behind WinCode 98.';
+const canonical = 'https://mrsanchezzzzz.github.io/dux-games/posts/';
+
+// ponytail: hardcoded post list — add new posts here; sorted newest first below.
+const posts = [
+  {
+    slug: 'how-i-built-an-idle-game-with-ai',
+    date: '2026-07-02',
+    cat: 'Devlog',
+    title: 'How I Built an iOS Idle Game in 2 Months, Solo, with Claude Code',
+    excerpt: 'The full postmortem of WinCode 98: designing the mechanics, balancing a multiplicative economy, and how Claude Code turned a side project into a shipped game.',
+    cover: 'assets/posts/wincode-98/built-with-ai-cover.webp',
+    coverAlt: 'Game in 2 months — how WinCode 98 was built solo with Claude Code',
+  },
+  {
+    slug: 'wincode-98-nostalgia',
+    date: '2026-06-20',
+    cat: 'Devlog',
+    title: 'Windows 98 Nostalgia: We Built a Game That Takes Programmers Back to the 90s',
+    excerpt: 'A free nostalgic clicker sim about the journey from machine code to the modern AI & Cloud era, built in the style of old-school computer interfaces.',
+    cover: 'assets/posts/wincode-98/cover.webp',
+    coverAlt: 'WinCode 98 — retro idle programmer simulator for iOS',
+  },
+].sort((a, b) => b.date.localeCompare(a.date));
+
+const [featured, ...rest] = posts;
+const fmt = (iso) => new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "DUX Games Journal",
+  "url": canonical,
+  "blogPost": posts.map((p) => ({
+    "@type": "BlogPosting",
+    "headline": p.title,
+    "datePublished": p.date,
+    "url": `https://mrsanchezzzzz.github.io/dux-games/posts/${p.slug}/`,
+  })),
+});
+---
+<BaseLayout {title} {description} {canonical} {jsonLd}>
+  <main>
+    <section class="journal">
+      <div class="container">
+        <div class="posts-head reveal">
+          <h1>Journal<span class="dot">.</span></h1>
+          <p class="lede">Devlogs, postmortems, and notes from the studio.</p>
+        </div>
+
+        <a class="post-featured row-link reveal" href={`${base}posts/${featured.slug}/`}>
+          <div class="thumb"><img src={`${base}${featured.cover}`} alt={featured.coverAlt} class="thumb-cover" /></div>
+          <div class="post-body">
+            <div class="post-meta">
+              <span class="cat">{featured.cat}</span>
+              <span class="date">{fmt(featured.date)}</span>
+            </div>
+            <h3>{featured.title}</h3>
+            <p>{featured.excerpt}</p>
+            <span class="read-more">Read post <span class="arrow">↗</span></span>
+          </div>
+        </a>
+
+        {rest.length > 0 && (
+          <div class="post-grid">
+            {rest.map((p) => (
+              <a class="post-card row-link reveal" href={`${base}posts/${p.slug}/`}>
+                <div class="thumb"><img src={`${base}${p.cover}`} alt={p.coverAlt} class="thumb-cover" loading="lazy" /></div>
+                <div class="post-body">
+                  <div class="post-meta">
+                    <span class="cat">{p.cat}</span>
+                    <span class="date">{fmt(p.date)}</span>
+                  </div>
+                  <h4>{p.title}</h4>
+                  <span class="read-more">Read <span class="arrow">↗</span></span>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .journal { padding: 76px 0 100px; }
+  .posts-head { margin-bottom: 48px; }
+  .posts-head h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(40px, 5.5vw, 68px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .posts-head h1 .dot { color: var(--green); }
+  .posts-head .lede { margin-top: 14px; }
+  @media (max-width: 720px) {
+    .journal { padding: 48px 0 64px; }
+    .posts-head { margin-bottom: 36px; }
+  }
+</style>

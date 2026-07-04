@@ -32,7 +32,7 @@ const jsonLd = JSON.stringify({
   {jsonLd}
 >
   <Fragment slot="hero">
-    <a class="back" href={`${base}#journal`}><span class="back-arrow">←</span> Journal</a>
+    <a class="back" href={`${base}posts/`}><span class="back-arrow">←</span> Journal</a>
     <div class="post-meta">
       <span class="cat">Devlog</span>
       <span class="date">June 20, 2026</span>
@@ -103,6 +103,6 @@ const jsonLd = JSON.stringify({
   <p>Curious how the game was actually made? Read the full postmortem: <a href={`${base}posts/how-i-built-an-idle-game-with-ai/`}>How I Built an iOS Idle Game in 2 Months, Solo, with Claude Code</a>.</p>
 
   <Fragment slot="footer-nav">
-    <a class="back" href={`${base}#journal`}>← All posts</a>
+    <a class="back" href={`${base}posts/`}>← All posts</a>
   </Fragment>
 </PostLayout>
