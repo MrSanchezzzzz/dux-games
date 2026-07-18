@@ -11,7 +11,7 @@
   --line-2:    rgba(255,255,255,0.18);
   --ink:       #f1f2ef;
   --muted:     #8a8f88;
-  --muted-2:   #5f635e;
+  --muted-2:   #7c807b;
 
   --green:       #2f6bff;
   --green-deep:  #1538b8;
@@ -551,7 +551,7 @@ body::before {
   flex-wrap: wrap;
 }
 .footer .left { display: flex; align-items: center; gap: 12px; }
-.footer .left img { height: 26px; }
+.footer .left img { height: 26px; width: auto; }
 .footer .copy {
   font-family: var(--mono);
   font-size: 11.5px;
