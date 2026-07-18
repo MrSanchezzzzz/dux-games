@@ -14,9 +14,12 @@ interface Props {
   publishedTime?: string;
   category?: string;
   tags?: string[];
+  /* lite: skip Google Fonts (system-font fallback) for utility pages that
+     must paint instantly with zero external dependency — e.g. /support. */
+  lite?: boolean;
 }
 
-const { title, description, canonical, ogImage, type = 'website', jsonLd, publishedTime, category, tags } = Astro.props;
+const { title, description, canonical, ogImage, type = 'website', jsonLd, publishedTime, category, tags, lite = false } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const defaultOg = `${import.meta.env.SITE}${base}assets/posts/wincode-98/cover.webp`;
 const ogImg = ogImage ?? defaultOg;
@@ -52,11 +55,15 @@ const ogImg = ogImage ?? defaultOg;
 <meta name="twitter:image" content={ogImg} />
 <meta name="twitter:image:alt" content={title} />
 {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+{!lite && (
+  <>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  </>
+)}
 </head>
-<body style="font-family: Manrope">
+<body style="font-family: Manrope, sans-serif">
 <div class="shell">
   <Nav />
   <slot />
