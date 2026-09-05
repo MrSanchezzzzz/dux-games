@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+
+const title = 'Our Games — DUX Games';
+const description = 'Every game from DUX Games — WinCode 98, Diggy Days: Treasure Digger, and what we\'re building next. Playful games for people who love (and occasionally fear) computers.';
+const canonical = 'https://mrsanchezzzzz.github.io/dux-games/games/';
+
+const games = [
+  {
+    name: 'WinCode 98',
+    blurb: 'Tap your way from basement intern to 90s software tycoon. Write code, swat legendary bugs, and upgrade your beige tower — all inside a gloriously fake retro desktop. Warning: highly clickable.',
+    tags: ['Clicker', 'Programmer sim', 'Retro 90s'],
+    icon: `${base}assets/wincode-98-icon.webp`,
+    emoji: null,
+    href: `${base}wincode-98/`,
+    platform: 'Download on iOS · App Store',
+    out: true,
+  },
+  {
+    name: 'Diggy Days',
+    blurb: 'Dig into history. Blast through ancient ground, unearth relics and buried treasure, master your tools and explore lost lands — one swing of the pickaxe at a time. Free to play on iPhone.',
+    tags: ['Casual', 'Digging', 'Treasure hunt'],
+    icon: `${base}assets/diggy-days-icon.webp`,
+    emoji: null,
+    href: `${base}diggy-days/`,
+    platform: 'Download on iOS · App Store',
+    out: true,
+  },
+  {
+    name: 'Space Shooter',
+    blurb: 'A new arcade shooter taking shape in the DUX Games hangar. The final name is still classified — but the engines are already warming up.',
+    tags: ['Arcade', 'Shooter', 'In development'],
+    icon: null,
+    emoji: '🚀',
+    href: `${base}space-shooter/`,
+    platform: 'In development · Coming soon',
+    out: false,
+  },
+];
+
+const shipped = games.filter(g => g.out).length;
+---
+<BaseLayout {title} {description} {canonical}>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <span class="kicker"><span class="eyebrow-dot"></span>DUX Games · Catalogue</span>
+      <h1>Our <em>games.</em></h1>
+      <p class="lede">Everything we've built — and a glimpse of what's coming next. {shipped} shipped, and always one more in the workshop.</p>
+    </div>
+  </section>
+
+  <!-- ============ GAMES ============ -->
+  <section class="games">
+    <div class="container">
+      {games.map(g => (
+        <a class="game-card row-link reveal" href={g.href}>
+          <div class="game-art">
+            {g.icon
+              ? <img src={g.icon} alt={`${g.name} game icon`} />
+              : <div class="game-art-ph" aria-hidden="true">{g.emoji}</div>}
+          </div>
+          <div class="game-body">
+            <div class="tags">
+              {g.tags.map(t => <span class="tag">{t}</span>)}
+            </div>
+            <h3>{g.name}</h3>
+            <p>{g.blurb}</p>
+            <div class="game-foot">
+              <span class={`btn ${g.out ? 'btn-primary' : 'btn-ghost'}`}>
+                {g.out ? 'View game' : 'Learn more'} <span class="arrow">↗</span>
+              </span>
+              <span class="platform">{g.platform}</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <h2>Got an idea? Let's talk<span class="dot">.</span></h2>
+        <a class="mail" href="mailto:kremenchuksh@gmail.com">kremenchuksh@gmail.com</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  /* First card needs a top rule since there's no section-head above it */
+  .games .container > .game-card:first-of-type { border-top: 1px solid var(--line-2); margin-top: 8px; }
+
+  /* Placeholder art for games without an icon yet (matches homepage) */
+  .game-art-ph {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(130px, 17vw, 210px);
+    background: linear-gradient(135deg, var(--bg-3), #0c0e0c);
+    border: 1px solid var(--line-2);
+    box-shadow: 0 26px 60px rgba(0,0,0,0.55);
+    transition: transform .3s ease;
+  }
+  .game-card:hover .game-art-ph { transform: scale(1.03) rotate(-1deg); }
+</style>

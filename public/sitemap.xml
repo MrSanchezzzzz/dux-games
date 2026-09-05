@@ -13,6 +13,24 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://mrsanchezzzzz.github.io/dux-games/games/</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mrsanchezzzzz.github.io/dux-games/diggy-days/</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mrsanchezzzzz.github.io/dux-games/space-shooter/</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://mrsanchezzzzz.github.io/dux-games/posts/</loc>
     <lastmod>2026-07-04</lastmod>
     <changefreq>weekly</changefreq>

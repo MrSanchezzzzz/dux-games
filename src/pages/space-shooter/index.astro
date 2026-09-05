@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// ponytail: working title only — real name TBD. Rename this route + copy once decided.
+const title = 'Space Shooter (working title) — DUX Games';
+const description = 'A new arcade space shooter from DUX Games — currently in development. Coming soon.';
+const canonical = 'https://mrsanchezzzzz.github.io/dux-games/space-shooter/';
+
+// Muted + no controls + looped background autoplay. loop needs playlist=<same id> to work.
+const ytId = 'Su6_Hsn9QVU';
+const ytSrc = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${ytId}&modestbranding=1&rel=0&playsinline=1&disablekb=1&showinfo=0`;
+---
+<BaseLayout {title} {description} {canonical}>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <span class="kicker"><span class="eyebrow-dot"></span>In development</span>
+      <h1>Space Shooter<br/><em>coming soon.</em></h1>
+      <p class="lede">A new arcade shooter is taking shape in the DUX Games hangar. The final name is still classified — check back soon.</p>
+      <div class="hero-cta">
+        <a class="btn btn-ghost" href="mailto:kremenchuksh@gmail.com">Get notified</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ss-video-sect">
+    <div class="container">
+      <div class="ss-video">
+        <iframe
+          src={ytSrc}
+          title="Space Shooter — early gameplay preview"
+          frameborder="0"
+          allow="autoplay; encrypted-media; picture-in-picture"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .ss-video-sect { padding: 72px 0 96px; border-bottom: 1px solid var(--line); }
+  .ss-video {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--line-2);
+    background: #000;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+  }
+  .ss-video iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    /* decorative background clip — no interaction, matches "no controls" intent */
+    pointer-events: none;
+  }
+</style>

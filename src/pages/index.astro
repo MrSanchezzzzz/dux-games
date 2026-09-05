@@ -43,8 +43,8 @@ const jsonLd = JSON.stringify({
       <div class="container">
         <div class="stats reveal">
           <div class="stat">
-            <div class="num" data-count="1">1</div>
-            <div class="lbl">Game shipped</div>
+            <div class="num" data-count="2">2</div>
+            <div class="lbl">Games shipped</div>
           </div>
           <div class="stat">
             <div class="num"><span class="accent">100</span>%</div>
@@ -84,8 +84,67 @@ const jsonLd = JSON.stringify({
             </div>
           </div>
         </a>
+
+        <a class="game-card row-link reveal" href={`${base}diggy-days/`}>
+          <div class="game-art">
+            <img src={`${base}assets/diggy-days-icon.webp`} alt="Diggy Days game icon" />
+          </div>
+          <div class="game-body">
+            <div class="tags">
+              <span class="tag">Casual</span>
+              <span class="tag">Digging</span>
+              <span class="tag">Treasure hunt</span>
+            </div>
+            <h3>Diggy Days</h3>
+            <p>Dig into history. Blast through ancient ground, unearth relics and buried treasure, master your tools and explore lost lands — one swing of the pickaxe at a time. Free to play on iPhone.</p>
+            <div class="game-foot">
+              <span class="btn btn-primary">View game <span class="arrow">↗</span></span>
+              <span class="platform">Download on iOS · App Store</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="game-card row-link reveal" href={`${base}space-shooter/`}>
+          <div class="game-art">
+            <div class="game-art-ph" aria-hidden="true">🚀</div>
+          </div>
+          <div class="game-body">
+            <div class="tags">
+              <span class="tag">Arcade</span>
+              <span class="tag">Shooter</span>
+              <span class="tag">In development</span>
+            </div>
+            <h3>Space Shooter</h3>
+            <p>A new arcade shooter taking shape in the DUX Games hangar. The final name is still classified — but the engines are already warming up.</p>
+            <div class="game-foot">
+              <span class="btn btn-ghost">Learn more <span class="arrow">↗</span></span>
+              <span class="platform">In development · Coming soon</span>
+            </div>
+          </div>
+        </a>
+
+        <div class="journal-foot reveal">
+          <a class="btn btn-ghost" href={`${base}games/`}>Explore all games <span class="arrow">↗</span></a>
+        </div>
       </div>
     </section>
+
+    <style>
+      .game-art-ph {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(130px, 17vw, 210px);
+        background: linear-gradient(135deg, var(--bg-3), #0c0e0c);
+        border: 1px solid var(--line-2);
+        box-shadow: 0 26px 60px rgba(0,0,0,0.55);
+        transition: transform .3s ease;
+      }
+      .game-card:hover .game-art-ph { transform: scale(1.03) rotate(-1deg); }
+    </style>
 
     <!-- ============ JOURNAL ============ -->
     <section class="journal" id="journal">
