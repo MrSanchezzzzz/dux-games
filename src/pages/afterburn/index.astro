@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+
+// ponytail: no App Store link yet — swap `appStore` in (and the CTA text) the day Afterburn goes live.
+const appStore = null;
+
+const title = 'Afterburn — arcade space shooter for iPhone — DUX Games';
+const description = 'Afterburn: an arcade space shooter for iPhone. Fly through gravity wells, manage your fuel, fight colossal bio-mechanical bosses and build your own fleet. Coming soon to the App Store.';
+const canonical = 'https://mrsanchezzzzz.github.io/dux-games/afterburn/';
+const icon = `${base}assets/afterburn-icon.png`;
+const ogImage = `${import.meta.env.SITE}${icon}`;
+
+// Muted + no controls + looped background autoplay. loop needs playlist=<same id> to work.
+const ytId = 'Su6_Hsn9QVU';
+const ytSrc = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${ytId}&modestbranding=1&rel=0&playsinline=1&disablekb=1`;
+
+const features = [
+  { emoji: '🪐', title: 'Gravity is a weapon', text: 'Planets pull you in. Slingshot around them, hold an orbit, dodge into a black hole’s shadow — every map bends your flight path.' },
+  { emoji: '⛽', title: 'Every burn counts', text: 'Thrust drains your fuel. Run dry and you drift. Grab tanks, crack loot containers and plan the route before the engine dies.' },
+  { emoji: '👾', title: 'Colossal bosses', text: 'Ten chapter bosses and four superbosses from the Swarm — each with its own trick and a final phase that changes the rules.' },
+  { emoji: '🚀', title: 'Your fleet, your paint', text: 'Collect eight ships with their own traits, bolt guns onto five hardpoints, upgrade engines and armour, and paint the hull — some paints are even alive.' },
+];
+
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  "name": "Afterburn",
+  "description": "An arcade space shooter: gravity wells, fuel management, colossal bosses and a fleet of upgradeable ships.",
+  "applicationCategory": "GameApplication",
+  "operatingSystem": "iOS",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "image": ogImage,
+  "url": canonical,
+  "publisher": { "@type": "Organization", "name": "DUX Games" }
+});
+---
+<BaseLayout {title} {description} {canonical} {ogImage} {jsonLd}>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container ab-hero">
+      <img class="ab-icon" src={icon} alt="Afterburn app icon" width="96" height="96" />
+      <span class="kicker"><span class="eyebrow-dot"></span>Arcade · Space shooter · iOS</span>
+      <h1>Light the <em>afterburner.</em></h1>
+      <p class="lede">An arcade space shooter where gravity is a weapon and fuel is life. Fight your way through ten chapters of the Swarm, take down colossal bosses, and build the fleet that finally ends it.</p>
+      <div class="hero-cta">
+        {appStore
+          ? <a class="btn btn-primary" href={appStore} target="_blank" rel="noopener">Download on iOS <span class="arrow">↗</span></a>
+          : <span class="btn btn-primary ab-soon">Coming soon to the App Store</span>}
+        <a class="btn btn-ghost" href="mailto:kremenchuksh@gmail.com?subject=Afterburn">Get notified</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VIDEO ============ -->
+  <section class="ab-section">
+    <div class="container">
+      <div class="ab-video">
+        <iframe src={ytSrc} title="Afterburn — gameplay preview" frameborder="0"
+          allow="autoplay; encrypted-media; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section class="ab-section">
+    <div class="container">
+      <div class="section-head divider">
+        <h2>Flight manual</h2>
+        <span class="idx">(features)</span>
+      </div>
+      <div class="ab-grid">
+        {features.map(f => (
+          <div class="ab-card">
+            <div class="ab-emoji">{f.emoji}</div>
+            <h3>{f.title}</h3>
+            <p>{f.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DOWNLOAD ============ -->
+  <section class="ab-section divider">
+    <div class="container ab-download">
+      <h2>Ready for launch<span class="dot">?</span></h2>
+      <p>Afterburn is free to play on iPhone, with optional purchases and optional reward videos — never forced ads.</p>
+      {appStore
+        ? <a class="btn btn-primary" href={appStore} target="_blank" rel="noopener">Get it on the App Store <span class="arrow">↗</span></a>
+        : <span class="btn btn-primary ab-soon">Coming soon</span>}
+      <div class="ab-links mono">
+        <a href={`${base}afterburn/privacy-policy/`}>Privacy policy</a>
+        <a href={`${base}support/`}>Support</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .ab-section { border-bottom: 1px solid var(--line); }
+  .ab-hero { position: relative; z-index: 1; text-align: center; padding: 88px 0 72px; }
+  .ab-icon {
+    width: 96px; height: 96px; border-radius: 22px; margin: 0 auto 26px; display: block;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.55); border: 1px solid var(--line-2);
+  }
+  .ab-hero .kicker { display: block; margin-bottom: 20px; }
+  .ab-hero .lede { margin: 26px auto 0; max-width: 620px; }
+  .ab-hero .hero-cta { justify-content: center; margin-top: 36px; }
+  .ab-soon { cursor: default; }
+
+  .ab-video {
+    position: relative; width: 100%; max-width: 1000px; margin: 72px auto;
+    aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--line-2); background: #000; box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+  }
+  .ab-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+
+  .ab-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--line); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; margin-bottom: 80px;
+  }
+  .ab-card { background: var(--bg); padding: 40px 30px 44px; display: flex; flex-direction: column; gap: 12px; transition: background .2s ease; }
+  .ab-card:hover { background: var(--bg-2); }
+  .ab-emoji { font-size: 30px; line-height: 1; }
+  .ab-card h3 { font-family: var(--serif); font-weight: 700; font-size: 20px; letter-spacing: -0.01em; margin: 4px 0 0; }
+  .ab-card p { font-size: 15px; line-height: 1.6; color: var(--muted); margin: 0; }
+
+  .ab-download { text-align: center; padding-top: 88px; padding-bottom: 96px; }
+  .ab-download h2 { font-family: var(--serif); font-weight: 700; font-size: clamp(36px, 5vw, 60px); line-height: 1; letter-spacing: -0.02em; margin: 0; }
+  .ab-download h2 .dot { color: var(--green); }
+  .ab-download p { font-size: 18px; color: var(--muted); max-width: 480px; margin: 22px auto 34px; }
+  .ab-links { display: flex; gap: 24px; justify-content: center; margin-top: 26px; font-size: 11px; }
+  .ab-links a { color: var(--muted-2); transition: color .15s ease; }
+  .ab-links a:hover { color: var(--green); }
+
+  @media (max-width: 980px) { .ab-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .ab-grid { grid-template-columns: 1fr; } .ab-video { margin: 48px auto; } }
+</style>
